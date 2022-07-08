@@ -9,7 +9,7 @@
 
 // export default Burger
 
-import { number } from 'prop-types';
+// import { number } from 'prop-types';
 import classes from './Burger.module.css'
 import BurgerIngredients from './BurgerIngredients/BurgerIngredients';
 
