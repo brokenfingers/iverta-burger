@@ -1,6 +1,6 @@
 import { string } from "prop-types";
 import React, { Component } from "react";
-import PropTypes, {InferProps} from 'prop-types'
+// import PropTypes, {InferProps} from 'prop-types'
 
 // class BurgerIngredients extends Component {
 //     render() {
@@ -17,7 +17,7 @@ interface Props {
     type: string
 }
 
-class BurgerIngredients extends Component<Props, Props>  {
+class BurgerIngredients extends Component<Props>  {
     // static defaultProps = {
     //     type: string.isRequired
     // }

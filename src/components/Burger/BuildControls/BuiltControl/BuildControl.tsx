@@ -1,10 +1,10 @@
+import classes from './BuildControl.module.css'
 interface Props   {
     label: string
 }
 
-import classes from './buildControl.module.css'
 
-const buildControl = (props:Props) => (
+const BuildControl = (props:Props) => (
    <div className={classes.BuildControl}> 
         <div className={classes.Label}>{props.label}</div>
         <button className={classes.Less}>LESS</button>
@@ -12,4 +12,4 @@ const buildControl = (props:Props) => (
    </div>
 )
 
-export default buildControl
+export default BuildControl
