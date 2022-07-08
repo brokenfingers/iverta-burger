@@ -29,12 +29,14 @@ interface Ingredients {
 
 const Burger = (props:Props) => {
     const ingredients:Ingredients = props.ingredients
-    const transformedIngredients = Object.keys(props.ingredients).map(ingrKey => {
+    let transformedIngredients: JSX.Element[] | JSX.Element = Object.keys(props.ingredients).map(ingrKey => {
         return [...Array(ingredients[ingrKey])].map((_, i) => {
             return <BurgerIngredients key={ingrKey+i} type={ingrKey}/>
         })
-    } )
-
+    } ).reduce((prev, curr) => prev.concat(curr), [])
+    if(transformedIngredients.length === 0) {
+        transformedIngredients = <p>Please start adding ingredients!</p>
+    }
 
     return (
         <div className={classes.Burger}>
