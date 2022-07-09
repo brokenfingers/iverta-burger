@@ -10,6 +10,7 @@ interface Props {
     disabled: { [key: string]: number | boolean }
     price: number
     purchasable: boolean
+    ordered: () => void
 }
 
 const controls: { label: string, type: type }[] = [
@@ -35,6 +36,7 @@ const BuildControls = (props: Props) => (
         }
         <button className={classes.OrderButton}
             disabled={!props.purchasable}
+            onClick={props.ordered}
         >ORDER NOW</button>
     </div>
 )
