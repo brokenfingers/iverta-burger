@@ -59,6 +59,10 @@ class BurgerBuilder extends Component {
         this.updatePurchaseState(updatedIngredients)
     }
 
+    purchaseCancelHandler = () => {
+        this.setState({ purchasing: false })
+    }
+
     removeIngredientHandles = (type: type) => {
 
         const oldCount = this.state.ingredients[type]
@@ -90,7 +94,7 @@ class BurgerBuilder extends Component {
 
         // const disabledInfo = Object.keys(this.state.ingredients)
         return <Aux>
-            <Modal show={this.state.purchasing}>
+            <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
                 <OrderSummary ingredients={this.state.ingredients}></OrderSummary>
             </Modal>
             <Burger ingredients={this.state.ingredients} />
