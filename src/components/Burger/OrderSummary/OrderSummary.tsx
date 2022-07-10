@@ -1,7 +1,10 @@
 import Aux from '../../../hoc/Auxx'
+import Button from '../../UI/Button/Button'
 
 interface Props {
     ingredients: { [key: string]: number }
+    purchaseCanceled: () => void
+    purchaseContinued: () => void
 }
 
 const OrderSummary = (props: Props) => {
@@ -14,6 +17,8 @@ const OrderSummary = (props: Props) => {
                 {ingredientSummary}
             </ul>
             <p>Continue to checkout?</p>
+            <Button btnType='Danger' clicked={props.purchaseCanceled}>CANCEL</Button>
+            <Button btnType='Success' clicked={props.purchaseContinued}>CONTINUE</Button>
         </Aux>
     )
 }
