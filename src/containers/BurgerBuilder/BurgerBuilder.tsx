@@ -4,7 +4,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Burger from '../../components/Burger/Burger'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Modal from '../../components/UI/Modal/Modal'
-import Aux from '../../hoc/Auxx'
+import Aux from '../../hoc/Auxx/Auxx'
 
 // interface Ingredients {
 //     [key:string]:number

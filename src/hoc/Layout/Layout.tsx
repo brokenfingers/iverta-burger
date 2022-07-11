@@ -1,7 +1,7 @@
 import {Component} from 'react'
-import Auxx from '../../hoc/Auxx'
-import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
-import Toolbar from '../Navigation/Toolbar/Toolbar';
+import Auxx from '../Auxx/Auxx'
+import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
+import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import classes from './Layout.module.css'
 
 interface Props  {
