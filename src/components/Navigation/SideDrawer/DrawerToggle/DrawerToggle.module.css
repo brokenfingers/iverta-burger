@@ -1,0 +1,9 @@
+.DrawerToggle{
+    height: 80%;
+    margin-top: 7px;
+    cursor: pointer;
+}
+
+.DrawerToggle img {
+    height: 90%;
+}

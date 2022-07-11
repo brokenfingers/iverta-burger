@@ -1,16 +1,18 @@
 import Logo from '../../Logo/Logo'
+import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle'
+import NavigationItems from '../NavigationItems/NavigationItems'
 import classes from './Toolbar.module.css'
 
 interface Props {
-
+    openSidedrawer: ()=>void
 }
 
 const Toolbar = (props:Props) => (
     <header className={classes.Toolbar}>
-        <div>MENU</div>
+        <DrawerToggle open={props.openSidedrawer}/>
         <Logo/>
-        <nav>
-            ...
+        <nav className={classes.DesktopOnly}>
+            <NavigationItems/>
         </nav>
     </header>
 )
