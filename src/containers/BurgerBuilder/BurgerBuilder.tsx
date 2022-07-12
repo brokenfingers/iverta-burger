@@ -5,11 +5,13 @@ import Burger from '../../components/Burger/Burger'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Modal from '../../components/UI/Modal/Modal'
 import Aux from '../../hoc/Auxx/Auxx'
+import { axiosOrders } from '../../axios-orders'
+import { isNativeError } from 'util/types'
+import { AxiosResponse } from 'axios'
 
-// interface Ingredients {
-//     [key:string]:number
-// }
+
 export type type = 'salad' | 'bacon' | 'cheese' | 'meat'
+
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -62,8 +64,28 @@ class BurgerBuilder extends Component {
     purchaseCancelHandler = () => {
         this.setState({ purchasing: false })
     }
+
     purchaseContinueHandler = () => {
-        alert('You continued!')
+        // alert('You continued!')
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Stasys',
+                address: {
+                    street: 'Procincijos 20',
+                    postCode: 'lt61321',
+                    country: 'Lithuania'
+                },
+                email: 'baranku20@gmail.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+        axiosOrders.addOrder(order)
+            .then(response => console.log(response))
+        // axiosInstance.post<CreateOrderInterface, AxiosResponse<CreateOrderInterface> >('/orders.json', order)
+        //     .then(response => console.log(response.data))
+        //     .catch(err => console.log(err))
     }
 
     removeIngredientHandles = (type: type) => {
