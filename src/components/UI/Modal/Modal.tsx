@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import classes from './Modal.module.css'
 import Aux from '../../../hoc/Auxx/Auxx'
 import Backdrop from '../Backdrop/Backdrop'
@@ -8,21 +8,21 @@ interface Props {
     modalClosed: () => void
 }
 
-interface IState{
+interface IState {
 
 }
 
 
 
 class Modal extends Component<Props> {
-    shouldComponentUpdate(nextProps:Props, nextState:IState) {
-        return nextProps.show !== this.props.show
+    shouldComponentUpdate(nextProps: Props, nextState: IState) {
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children
     }
     // componentDidUpdate() {
     //     console.log('[Modal] did update')
     // }
     render() {
-        return(
+        return (
             <Aux>
                 <Backdrop show={this.props.show} clicked={this.props.modalClosed} />
                 <div className={classes.Modal}

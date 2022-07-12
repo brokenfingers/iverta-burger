@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
+// import axios, { AxiosRequestConfig } from 'axios'
 
 
 interface Ingredients {
@@ -18,11 +19,14 @@ export interface IOrder {
     deliveryMethod: string
 
 }
-interface AxiosCreate {
-    url: string,
-    data: IOrder,
-    config: AxiosRequestConfig
+
+export interface iResponse {
+    data: IOrder
 }
+
+// interface AxiosInstance {
+//     request<T = IOrder, R = AxiosResponse<T>>(config: AxiosRequestConfig): Promise<R>;
+// }
 
 const instance = axios.create({
     baseURL: 'https://iverta-burger-default-rtdb.europe-west1.firebasedatabase.app'
