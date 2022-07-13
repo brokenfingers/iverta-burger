@@ -7,7 +7,7 @@ import Modal from '../../components/UI/Modal/Modal'
 import Aux from '../../hoc/Auxx/Auxx'
 import { axiosOrders, iResponse } from '../../axios-orders'
 import Spinner from '../../components/UI/Spinner/Spinner'
-
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 
 export type type = 'salad' | 'bacon' | 'cheese' | 'meat'
 
@@ -143,4 +143,6 @@ class BurgerBuilder extends Component {
 
 }
 
+
 export default BurgerBuilder
+// export default withErrorHandler(BurgerBuilder ) 
