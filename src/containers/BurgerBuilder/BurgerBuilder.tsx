@@ -5,7 +5,7 @@ import Burger from '../../components/Burger/Burger'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Modal from '../../components/UI/Modal/Modal'
 import Aux from '../../hoc/Auxx/Auxx'
-import { axiosOrders, iResponse } from '../../axios-orders'
+import Axios, { axiosOrders} from '../../axios-orders'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 
@@ -19,7 +19,19 @@ const INGREDIENT_PRICES = {
     bacon: 0.7
 }
 
-class BurgerBuilder extends Component {
+interface IProps {
+    
+}
+
+interface IState{
+    ingredients: {[key:string]:number};
+    totalPrice: number;
+    purchasable: boolean;
+    purchasing: boolean;
+    loading: boolean;
+}
+
+export class BurgerBuilder extends Component<IProps, IState> {
     // constructor(props:{}) {
     //     super(props)
     //     this.state = {}
@@ -37,8 +49,10 @@ class BurgerBuilder extends Component {
         loading: false
 
     }
+
     purchaseHandler = () => {
         this.setState({ purchasing: true })
+        
     }
 
     updatePurchaseState(ingredients: { [key: string]: number }) {
@@ -144,5 +158,6 @@ class BurgerBuilder extends Component {
 }
 
 
-export default BurgerBuilder
-// export default withErrorHandler(BurgerBuilder ) 
+
+// export default BurgerBuilder
+export default withErrorHandler(BurgerBuilder, Axios) 
