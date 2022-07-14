@@ -9,6 +9,8 @@ import Axios, { axiosOrders} from '../../axios-orders'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import {Ingredients, IBurgerBuilder} from '../../Interfaces'
+
+
 export type type = 'salad' | 'bacon' | 'cheese' | 'meat'
 
 

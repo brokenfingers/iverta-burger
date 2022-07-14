@@ -42,9 +42,9 @@ const orderRequests = {
 }
 
 export const axiosOrders = {
-    getIngredients: (): Promise<Ingredients> => orderRequests.get('/ingredients.json'),
+    getIngredients: (): Promise<Ingredients> => orderRequests.get('/ingredients'),
     // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
-    addOrder: (order: IOrder): Promise<IOrder> => orderRequests.post('/orders.json', order)
+    addOrder: (order: IOrder): Promise<IOrder> => orderRequests.post('/orders', order)
     // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
 }
 

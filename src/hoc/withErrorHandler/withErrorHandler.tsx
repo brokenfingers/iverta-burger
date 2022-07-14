@@ -2,9 +2,9 @@
 import Modal from '../../components/UI/Modal/Modal'
 import Aux from '../Auxx/Auxx'
 import {BurgerBuilder} from '../../containers/BurgerBuilder/BurgerBuilder'
-import {IBurgerBuilder} from '../../Interfaces'
+// import {IBurgerBuilder} from '../../Interfaces'
 import {Component} from 'react'
-import { AxiosInstance } from 'axios'
+import {AxiosInstance} from 'axios'
 
 interface Props{
 
@@ -14,30 +14,44 @@ interface Props{
 const withErrorHandler = (WrappedComponent: typeof BurgerBuilder, axios:AxiosInstance) => {
 
     return class extends Component<Props> {
-        state:{error: null | {message:string}}= {
-            error:null
+       
+        state:{error: null | {message:string}}
+        resInterceptor:number
+        reqInterceptor:number
+
+        constructor(props:Props ) {
+            super(props)
+        
+            // this.setState({error:{}})
+            this.state = {
+                error: {
+                    message: 'labas'
+                }
             }
+            this.reqInterceptor = axios.interceptors.request.use(req => {
+                // this.setState({error: null})
+                return req
+            })
 
-        // constructor(props:Props) {
-        //     super(props)
-        //     axios.interceptors.request.use(req => {
-        //         this.setState({error: false})
-        //         return req
-        //     })
-        //     axios.interceptors.response.use(res=>res, error => {
-        //         this.setState({error: error})
-        //     })
-        // }    
+            this.resInterceptor = axios.interceptors.response.use(res=>res, error => {
+                console.log(error)
+                this.setState({error: error})
+                // this.state = {error :error}
+                console.log(this.state)
+            })
 
-        componentDidMount() {
-        axios.interceptors.request.use(req => {
-            this.setState({error: false})
-            return req
-        })
-        axios.interceptors.response.use(res=>res, error => {
-            this.setState({error: error})
-        })
+            
+
         }
+        
+     
+        componentWillUnmount() {
+            console.log(this.state, 'sdfdf')
+            axios.interceptors.request.eject(this.reqInterceptor)
+            axios.interceptors.response.eject(this.resInterceptor)
+        }
+
+
 
         errorConfirmedHandler = () => {
             this.setState({error: null})
@@ -57,21 +71,6 @@ const withErrorHandler = (WrappedComponent: typeof BurgerBuilder, axios:AxiosIns
 
 
 
-// const withErrorHandler = (WrappedComponent: typeof BurgerBuilder) => {
-
-//     return ((props: Props) => {
-//         return (
-//             <Aux>
-//                 <Modal show modalClosed={() => { }}>
-//                     Something didn't work!
-//                 </Modal>
-//                 <WrappedComponent {...props} />
-//             </Aux>
-//         )
-//     }
-//     )
-
-// }
 
 
 export default withErrorHandler
