@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
+import axios, { AxiosResponse} from 'axios'
 // import axios, { AxiosRequestConfig } from 'axios'
 
 
@@ -36,13 +36,13 @@ const responseBody = (response: AxiosResponse) => response.data
 
 
 const orderRequests = {
-    // get: (url: string) => instance.get<Book>(url).then(responseBody),
+    get: (url: string) => instance.get<Ingredients>(url).then(responseBody),
     post: (url: string, body: IOrder) => instance.post<IOrder>(url, body).then(responseBody),
     // delete: (url: string) => instance.delete<Book>(url).then(responseBody),
 }
 
 export const axiosOrders = {
-    // getBooks: (): Promise<Book[]> => bookRequests.get('/books'),
+    getIngredients: (): Promise<Ingredients> => orderRequests.get('/ingredients.json'),
     // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
     addOrder: (order: IOrder): Promise<IOrder> => orderRequests.post('/orders.json', order)
     // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
