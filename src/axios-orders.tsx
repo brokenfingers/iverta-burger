@@ -1,4 +1,4 @@
-import axios, { AxiosResponse} from 'axios'
+import axios, { AxiosResponse } from 'axios'
 // import axios, { AxiosRequestConfig } from 'axios'
 
 
@@ -42,9 +42,9 @@ const orderRequests = {
 }
 
 export const axiosOrders = {
-    getIngredients: (): Promise<Ingredients> => orderRequests.get('/ingredients'),
+    getIngredients: (): Promise<Ingredients> => orderRequests.get('/ingredients.json'),
     // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
-    addOrder: (order: IOrder): Promise<IOrder> => orderRequests.post('/orders', order)
+    addOrder: (order: IOrder): Promise<IOrder> => orderRequests.post('/orders.json', order)
     // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
 }
 
