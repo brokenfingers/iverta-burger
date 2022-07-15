@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import Checkout from './containers/BurgerBuilder/Checkout/Checkout';
 
 // function App() {
 //   return (
@@ -19,10 +20,8 @@ class App extends Component {
     return (
       <div>
         <Layout>
-          {
             <BurgerBuilder />
-          }
-
+            <Checkout/>
         </Layout>
       </div>
     )
