@@ -6,13 +6,6 @@ import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 import Checkout from "./containers/BurgerBuilder/Checkout/Checkout";
 
 class App extends Component {
-  state: { redirLink: boolean } = {
-    redirLink: false,
-  };
-
-  setLink = () => {
-    this.setState({ redirLink: true });
-  };
 
   render() {
     return (
@@ -21,13 +14,7 @@ class App extends Component {
           <Routes>
             <Route
               path="/"
-              element={
-                !this.state.redirLink ? (
-                  <BurgerBuilder redir={this.setLink} />
-                ) : (
-                  <Navigate to="/checkout" replace={false} />
-                )
-              }
+              element={<BurgerBuilder />}
             />
             <Route path="/checkout" element={<Checkout />} />
           </Routes>

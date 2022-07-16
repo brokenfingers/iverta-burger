@@ -6,7 +6,7 @@ import { Component } from "react";
 import { AxiosInstance } from "axios";
 
 interface Props {
-  redir: () => void;
+
 }
 
 const withErrorHandler = (
