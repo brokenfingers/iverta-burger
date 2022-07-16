@@ -1,4 +1,4 @@
-import { Component, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
@@ -20,18 +20,6 @@ const INGREDIENT_PRICES = {
     bacon: 0.7,
 };
 
-interface IProps {
-
-}
-
-interface IBurgerBuilderState {
-    ingredients: Ingredients;
-    totalPrice: number;
-    purchasable: boolean;
-    purchasing: boolean;
-    loading: boolean;
-    error: boolean;
-}
 
 export const BurgerBuilder = () => {
     const initState: IBugerBuilderState = {
@@ -44,7 +32,6 @@ export const BurgerBuilder = () => {
     };
     const navigate = useNavigate()
     const [state, setState] = useState(initState)
-    console.log(state)
     const purchaseHandler = () => {
         setState(prev => ({ ...prev, purchasing: true }));
     };
@@ -177,8 +164,8 @@ export const BurgerBuilder = () => {
 
 }
 
-export default BurgerBuilder
-// export default withErrorHandler(BurgerBuilder, Axios);
+// export default BurgerBuilder
+export default withErrorHandler(BurgerBuilder, Axios);
 
 // export class BurgerBuilder extends Component<IProps, IBugerBuilderState> {
 
