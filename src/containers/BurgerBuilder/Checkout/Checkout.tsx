@@ -1,26 +1,35 @@
-import {Component} from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import CheckoutSummary from '../../../components/Order/CheckoutSummary/CheckoutSummary'
 
+const Checkout = () => {
 
-class Checkout extends Component {
-
-    state = {
+    const initState = {
         ingredients: {
-            salad:1,
+            salad: 1,
             meat: 1,
             cheese: 1,
             bacon: 1
         }
     }
+    const [checkoutState, setCheckoutState] = useState(initState)
+    const [searchParams] = useSearchParams()
 
-    render( ) {
+    useEffect(() => {
+        console.log(searchParams.toString())
+    }, [])
 
-        return(
-            <div>
-                <CheckoutSummary ingredients={this.state.ingredients}/>
-            </div>
-        )
-    }
+    const navigate = useNavigate()
+    return (
+        <div>
+            <CheckoutSummary
+                ingredients={checkoutState.ingredients}
+                checkoutCanceled={() => { navigate(-1) }}
+                checkoutContinued={() => { navigate('checkout/contact-data') }}
+            />
+        </div>
+    )
+
 
 }
 
