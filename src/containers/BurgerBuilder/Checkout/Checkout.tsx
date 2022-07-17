@@ -1,32 +1,41 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import CheckoutSummary from '../../../components/Order/CheckoutSummary/CheckoutSummary'
+import Spinner from '../../../components/UI/Spinner/Spinner'
+import { Ingredients } from '../../../Interfaces'
 
 const Checkout = () => {
 
-    const initState = {
+    const initState: { ingredients: Ingredients } = {
         ingredients: {
-            salad: 1,
-            meat: 1,
-            cheese: 1,
-            bacon: 1
         }
     }
     const [checkoutState, setCheckoutState] = useState(initState)
     const [searchParams] = useSearchParams()
 
     useEffect(() => {
-        console.log(searchParams.toString())
+        let ingredients = {} as Ingredients;
+        searchParams.forEach((value, key) => {
+            ingredients[key] = +value
+        })
+        setCheckoutState(prev => ({ ...prev, ingredients: ingredients }))
+        console.log(checkoutState)
     }, [])
 
     const navigate = useNavigate()
+
+    let checkoutJSX = <Spinner />
+    if (Object.keys(checkoutState.ingredients).length) {
+        checkoutJSX = <CheckoutSummary
+            ingredients={checkoutState.ingredients}
+            checkoutCanceled={() => { navigate(-1) }}
+            checkoutContinued={() => { navigate('checkout/contact-data') }}
+        />
+    }
+
     return (
         <div>
-            <CheckoutSummary
-                ingredients={checkoutState.ingredients}
-                checkoutCanceled={() => { navigate(-1) }}
-                checkoutContinued={() => { navigate('checkout/contact-data') }}
-            />
+            {checkoutJSX}
         </div>
     )
 
