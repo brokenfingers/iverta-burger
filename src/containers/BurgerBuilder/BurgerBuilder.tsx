@@ -9,7 +9,7 @@ import Axios, { axiosOrders } from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import { Ingredients, IBugerBuilderState } from "../../Interfaces";
-import { createSearchParams, ParamKeyValuePair, useNavigate, useSearchParams } from "react-router-dom";
+import { createSearchParams, ParamKeyValuePair, useNavigate } from "react-router-dom";
 
 export type type = "salad" | "bacon" | "cheese" | "meat";
 
@@ -91,7 +91,7 @@ export const BurgerBuilder = () => {
 
 
         const search = Object.entries(state.ingredients).map(arr => arr.map(arr2 => arr2)) as ParamKeyValuePair[]
-
+        search.push(['price', state.totalPrice.toString()])
 
         navigate({
             pathname: '/checkout',

@@ -1,31 +1,37 @@
-import { useEffect, useState } from 'react'
-import { Route, useNavigate, useSearchParams, useMatch, Routes, useLocation, Outlet } from 'react-router-dom'
+import { useEffect, useState, } from 'react'
+import { useNavigate, useSearchParams, Outlet } from 'react-router-dom'
 import CheckoutSummary from '../../../components/Order/CheckoutSummary/CheckoutSummary'
 import Spinner from '../../../components/UI/Spinner/Spinner'
-import { Ingredients } from '../../../Interfaces'
-import ContactData from './ContactData/ContactData'
+import { ICheckoutState } from '../../../Interfaces'
+
 
 
 
 const Checkout = () => {
 
-    const initState: { ingredients: Ingredients, currentPath: string } = {
+    const initState: ICheckoutState = {
         ingredients: {
         },
-        currentPath: ''
+        price: 0
     }
     const [checkoutState, setCheckoutState] = useState(initState)
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
-    const currentLocation = useLocation()
+
+
 
     useEffect(() => {
-        let ingredients = {} as Ingredients;
+        let stateUpdate = { ingredients: {} } as ICheckoutState;
         searchParams.forEach((value, key) => {
-            ingredients[key] = +value
+            if (key === 'price') {
+                stateUpdate[key] = +value
+            } else {
+                stateUpdate['ingredients'][key] = +value
+            }
         })
-        setCheckoutState(prev => ({ ...prev, ingredients: ingredients, currentPath: currentLocation.search }))
-        console.log(checkoutState)
+
+        setCheckoutState(prev => ({ ...prev, ingredients: stateUpdate.ingredients, price: stateUpdate.price }))
+
     }, [])
 
 
@@ -38,13 +44,16 @@ const Checkout = () => {
         />
     }
 
-    // let match =
+
+
     return (
         <div>
             {checkoutJSX}
-            <Outlet />
+            <Outlet context={checkoutState} />
         </div>
     )
+
+
 
 
 }

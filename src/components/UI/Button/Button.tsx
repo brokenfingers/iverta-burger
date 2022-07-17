@@ -7,7 +7,10 @@ interface Props {
 }
 
 const Button = (props: Props) => (
-    <button className={[classes.Button, classes[props.btnType]].join(' ')} onClick={props.clicked}>
+    <button className={[classes.Button, classes[props.btnType]].join(' ')} onClick={e => {
+        e.preventDefault()
+        return props.clicked();
+    }}>
         {props.children}
     </button>
 )

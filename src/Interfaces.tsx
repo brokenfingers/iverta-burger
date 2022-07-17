@@ -10,3 +10,8 @@ export interface IBugerBuilderState {
   loading: boolean;
   error: boolean;
 }
+
+export interface ICheckoutState {
+  ingredients: Ingredients,
+  price: number
+}

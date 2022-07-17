@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import Aux from '../../../hoc/Auxx/Auxx'
 import Button from '../../UI/Button/Button'
 
@@ -13,8 +13,8 @@ class OrderSummary extends Component<Props> {
     // componentDidUpdate() {
     //     console.log('[OrderSummary] WillUpdate')
     // }
-   render() {
-    const ingredientSummary = Object.keys(this.props.ingredients).map(igKey => <li key={igKey}><span style={{ textTransform: 'capitalize' }}>{igKey}</span>: {this.props.ingredients[igKey]} </li>)
+    render() {
+        const ingredientSummary = Object.keys(this.props.ingredients).map(igKey => <li key={igKey}><span style={{ textTransform: 'capitalize' }}>{igKey}</span>: {this.props.ingredients[igKey]} </li>)
         return (
             <Aux>
                 <h3>Your order</h3>
@@ -28,7 +28,7 @@ class OrderSummary extends Component<Props> {
                 <Button btnType='Success' clicked={this.props.purchaseContinued}>CONTINUE</Button>
             </Aux>
         )
-   }
+    }
 }
 
 export default OrderSummary
