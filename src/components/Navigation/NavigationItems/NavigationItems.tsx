@@ -20,18 +20,27 @@ const NavigationItems = () => {
   };
   const [activeLinks, setActiveLinks] = useState<IActiveLinks>(initActiveLinks);
 
+  const setCurrentLinkTrue = (path: string) => {
+    setActiveLinks((old) => ({
+      ...old,
+      active: { [path]: true },
+    }));
+  };
+
+  const setAllLinksfalse = () => {
+    setActiveLinks((old) => ({
+      ...old,
+      active: { ["/"]: false, ["/orders"]: false },
+    }));
+  };
+
   if (activeLinks.currentLocation !== currentUrl.pathname) {
     setActiveLinks((old) => ({ ...old, currentLocation: currentUrl.pathname }));
+    setAllLinksfalse();
     if (currentUrl.pathname === "/") {
-      setActiveLinks((old) => ({
-        ...old,
-        active: { ["/"]: true, ["/orders"]: false },
-      }));
+      setCurrentLinkTrue("/");
     } else {
-      setActiveLinks((old) => ({
-        ...old,
-        active: { ["/"]: false, ["/orders"]: true },
-      }));
+      setCurrentLinkTrue("/orders");
     }
   }
 
