@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Order from "../../../components/Order/Order";
 import axios, { axiosOrders } from "../../../axios-orders";
 import { IOrder } from "../../../Interfaces";
@@ -11,7 +11,7 @@ const Orders = () => {
   };
   const [state, setState] = useState(initState);
 
-  useEffect(() => {
+  const fetchOrders = useCallback(() => {
     axiosOrders
       .getOrders()
       .then((response) => {
@@ -23,7 +23,13 @@ const Orders = () => {
         return { ...response, loading: false };
       })
       .catch((err) => ({ ...state, loading: false }));
-  }, []);
+  }, [])
+
+
+  useEffect(() => {
+    fetchOrders()
+
+  }, [fetchOrders]);
 
   return (
     <div>

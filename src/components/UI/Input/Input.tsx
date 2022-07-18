@@ -5,11 +5,16 @@ interface IConfig {
 }
 
 interface Props {
-  //   label: string;
-  //   inputType: string;
+
   value: string;
   elementType: string;
-  elementConfig: { [key: string]: string | IConfig[] };
+  elementConfig: {
+    placeholder?: string
+    type?: string
+    options?: IConfig[]
+
+  };
+  changed: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void
 }
 
 type inputElementType = JSX.Element | null;
@@ -23,6 +28,7 @@ const Input = (props: Props) => {
           className={classes.InputElement}
           {...props.elementConfig}
           value={props.value}
+          onChange={props.changed}
         />
       );
       break;
@@ -32,7 +38,19 @@ const Input = (props: Props) => {
           className={classes.InputElement}
           {...props.elementConfig}
           value={props.value}
+          onChange={props.changed}
         />
+      );
+      break;
+    case "select":
+      inputElement = (
+        <select
+          className={classes.InputElement}
+          {...props.elementConfig}
+          onChange={props.changed}
+          value={props.value}>
+          {props.elementConfig.options ? props.elementConfig.options.map(option => (<option key={option.value} value={option.value}>{option.displayValue}</option>)) : null}
+        </select>
       );
       break;
     default:
@@ -41,6 +59,7 @@ const Input = (props: Props) => {
           className={classes.InputElement}
           {...props.elementConfig}
           value={props.value}
+          onChange={props.changed}
         />
       );
   }

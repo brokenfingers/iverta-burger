@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { axiosOrders } from "../../../../axios-orders";
 import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
-import { element } from "prop-types";
+
 
 interface IStringObject {
   [key: string]: string;
@@ -14,9 +14,15 @@ interface IStringObject {
 
 interface InputElement {
   elementType: string;
-  elementConfig: { [key: string]: string | IStringObject[] };
+  elementConfig: {
+    // [key: string]: string,
+    placeholder?: string
+    type?: string
+    options?: IStringObject[]
+  };
   value: string;
 }
+
 
 interface IOrderForm {
   [key: string]: InputElement;
@@ -103,7 +109,14 @@ const ContactData = () => {
     });
   }
 
-  console.log(formElementsArray);
+  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>, identifier: string) => {
+    const updatedForm = { ...orderData.orderForm }
+    const updatedFormElememnt = { ...updatedForm[identifier] }
+    updatedFormElememnt.value = e.target.value
+    updatedForm[identifier] = updatedFormElememnt
+
+    setOrderData(pr => ({ ...pr, orderForm: updatedForm }))
+  }
 
   const orderHandler = () => {
     setOrderData((prev) => ({ ...prev, loading: true }));
@@ -140,6 +153,7 @@ const ContactData = () => {
           value={formElement.config.value}
           elementType={formElement.config.elementType}
           elementConfig={formElement.config.elementConfig}
+          changed={e => { inputChangeHandler(e, formElement.id) }}
         />
       ))}
       <Button btnType="Success" clicked={orderHandler}>
