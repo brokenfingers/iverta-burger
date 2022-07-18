@@ -1,11 +1,50 @@
-import NavigationItem from './NavigationItem/NavigationItem'
-import classes from './NavigationItems.module.css'
+import { useEffect, useState } from "react";
+import NavigationItem from "./NavigationItem/NavigationItem";
+import classes from "./NavigationItems.module.css";
+import { useLocation } from "react-router-dom";
 
-const NavigationItems = () => (
+interface IActiveLinks {
+  currentLocation: string;
+  active: { [key: string]: boolean };
+}
+
+const NavigationItems = () => {
+  const currentUrl = useLocation();
+
+  const initActiveLinks = {
+    currentLocation: "/",
+    active: {
+      "/": true,
+      "/orders": false,
+    },
+  };
+  const [activeLinks, setActiveLinks] = useState<IActiveLinks>(initActiveLinks);
+
+  if (activeLinks.currentLocation !== currentUrl.pathname) {
+    setActiveLinks((old) => ({ ...old, currentLocation: currentUrl.pathname }));
+    if (currentUrl.pathname === "/") {
+      setActiveLinks((old) => ({
+        ...old,
+        active: { ["/"]: true, ["/orders"]: false },
+      }));
+    } else {
+      setActiveLinks((old) => ({
+        ...old,
+        active: { ["/"]: false, ["/orders"]: true },
+      }));
+    }
+  }
+
+  return (
     <ul className={classes.NavigationItems}>
-        <NavigationItem active link='/'>Burger Builder</NavigationItem>
-        <NavigationItem active={false} link='/'>Checkout</NavigationItem>
+      <NavigationItem active={activeLinks.active["/"]} link="/">
+        Burger Builder
+      </NavigationItem>
+      <NavigationItem active={activeLinks.active["/orders"]} link="/orders">
+        Orders
+      </NavigationItem>
     </ul>
-)
+  );
+};
 
-export default NavigationItems
+export default NavigationItems;
