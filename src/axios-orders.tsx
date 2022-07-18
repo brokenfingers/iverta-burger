@@ -1,27 +1,13 @@
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from "axios";
+import { IOrder } from "./Interfaces";
 // import axios, { AxiosRequestConfig } from 'axios'
 
-
 interface Ingredients {
-    [key: string]: number
-}
-
-export interface IOrder {
-    ingredients: Ingredients,
-    price: number,
-    customer: {
-        name: string,
-        address: {
-            [key: string]: string
-        },
-        email: string
-    },
-    deliveryMethod: string
-
+  [key: string]: number;
 }
 
 export interface iResponse {
-    data: IOrder
+  data: IOrder;
 }
 
 // interface AxiosInstance {
@@ -29,25 +15,28 @@ export interface iResponse {
 // }
 
 const instance = axios.create({
-    baseURL: 'https://iverta-burger-default-rtdb.europe-west1.firebasedatabase.app'
-})
+  baseURL:
+    "https://iverta-burger-default-rtdb.europe-west1.firebasedatabase.app",
+});
 
-const responseBody = (response: AxiosResponse) => response.data
-
+const responseBody = (response: AxiosResponse) => response.data;
 
 const orderRequests = {
-    get: (url: string) => instance.get<Ingredients>(url).then(responseBody),
-    post: (url: string, body: IOrder) => instance.post<IOrder>(url, body).then(responseBody),
-    // delete: (url: string) => instance.delete<Book>(url).then(responseBody),
-}
+  get: (url: string) => instance.get<Ingredients>(url).then(responseBody),
+  post: (url: string, body: IOrder) =>
+    instance.post<IOrder>(url, body).then(responseBody),
+  // delete: (url: string) => instance.delete<Book>(url).then(responseBody),
+};
 
 export const axiosOrders = {
-    getIngredients: (): Promise<Ingredients> => orderRequests.get('/ingredients.json'),
-    // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
-    addOrder: (order: IOrder): Promise<IOrder> => orderRequests.post('/orders.json', order)
-    // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
-}
-
+  getIngredients: (): Promise<Ingredients> =>
+    orderRequests.get("/ingredients.json"),
+  getOrders: (): Promise<IOrder[]> => orderRequests.get("/orders.json"),
+  // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
+  addOrder: (order: IOrder): Promise<IOrder> =>
+    orderRequests.post("/orders.json", order),
+  // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
+};
 
 // import Books from './api' // config added in api.ts file
 // const [books, setBooks] = React.useState<Book[]>([]);
@@ -59,5 +48,4 @@ export const axiosOrders = {
 //         console.log(err);
 //     });
 
-
-export default instance
+export default instance;

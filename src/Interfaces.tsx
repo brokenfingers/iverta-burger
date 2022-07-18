@@ -12,6 +12,20 @@ export interface IBugerBuilderState {
 }
 
 export interface ICheckoutState {
-  ingredients: Ingredients,
-  price: number
+  ingredients: Ingredients;
+  price: number;
+}
+
+export interface IOrder {
+  ingredients: Ingredients;
+  price: number;
+  customer: {
+    name: string;
+    address: {
+      [key: string]: string;
+    };
+    email: string;
+  };
+  deliveryMethod: string;
+  id?: string; //used in Order.tsx
 }

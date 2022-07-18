@@ -1,13 +1,32 @@
+import { useEffect } from "react";
+import { Ingredients } from "../../Interfaces";
 import classes from "./Order.module.css";
 
-interface IProps {}
+interface IProps {
+  price: number;
+  ingredients: Ingredients;
+}
 
 const Order = (props: IProps) => {
+  const ingredients = [] as { name: string; amount: number }[];
+  for (let ingredientName in props.ingredients) {
+    ingredients.push({
+      name: ingredientName,
+      amount: props.ingredients[ingredientName],
+    });
+  }
+
+  const ingredientOutput = ingredients.map((ig, i) => (
+    <span key={i}>
+      {ig.name} ({ig.amount})
+    </span>
+  ));
+
   return (
     <div className={classes.Order}>
-      <p>Ingredients: Salad(1)</p>
+      <p>Ingredients: {ingredientOutput}</p>
       <p>
-        Price: <strong>5.4 EUR</strong>
+        Price: <strong>{props.price.toFixed(2)} EUR</strong>
       </p>
     </div>
   );
