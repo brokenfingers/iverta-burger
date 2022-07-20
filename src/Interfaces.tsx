@@ -16,16 +16,14 @@ export interface ICheckoutState {
   price: number;
 }
 
+export interface IStringObject {
+  [key: string]: string;
+}
+
 export interface IOrder {
   ingredients: Ingredients;
   price: number;
-  customer: {
-    name: string;
-    address: {
-      [key: string]: string;
-    };
-    email: string;
-  };
+  orderData: IStringObject
   deliveryMethod: string;
   id?: string; //used in Order.tsx
 }

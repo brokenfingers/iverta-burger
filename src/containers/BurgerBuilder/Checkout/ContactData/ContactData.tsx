@@ -1,6 +1,6 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Button from "../../../../components/UI/Button/Button";
-import { ICheckoutState } from "../../../../Interfaces";
+import { ICheckoutState, IStringObject } from "../../../../Interfaces";
 import classes from "./ContactData.module.css";
 import { useEffect, useState } from "react";
 import { axiosOrders } from "../../../../axios-orders";
@@ -8,9 +8,7 @@ import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
 
 
-interface IStringObject {
-  [key: string]: string;
-}
+
 
 interface InputElement {
   elementType: string;
@@ -120,18 +118,18 @@ const ContactData = () => {
 
   const orderHandler = () => {
     setOrderData((prev) => ({ ...prev, loading: true }));
+
+    const formData = {} as IStringObject
+
+    for (let formKey in orderData.orderForm) {
+      formData[formKey] = orderData.orderForm[formKey].value
+
+    }
+
     const order = {
       ingredients: checkoutState.ingredients,
       price: checkoutState.price,
-      customer: {
-        name: "Stasys",
-        address: {
-          street: "Procincijos 21",
-          postCode: "lt61321",
-          country: "Lithuania",
-        },
-        email: "baranku20@gmail.com",
-      },
+      orderData: formData,
       deliveryMethod: "fastest",
     };
     axiosOrders
@@ -146,7 +144,7 @@ const ContactData = () => {
       });
   };
   let form = (
-    <form>
+    <form onSubmit={orderHandler}>
       {formElementsArray.map((formElement) => (
         <Input
           key={formElement.id}
