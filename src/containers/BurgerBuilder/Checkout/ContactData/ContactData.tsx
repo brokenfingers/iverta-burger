@@ -7,7 +7,7 @@ import { axiosOrders } from "../../../../axios-orders";
 import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
 
-
+type IValidation = { valid: boolean, required: boolean }
 
 
 interface InputElement {
@@ -19,6 +19,7 @@ interface InputElement {
     options?: IStringObject[]
   };
   value: string;
+  validation: IValidation
 }
 
 
@@ -46,6 +47,10 @@ const ContactData = () => {
           placeholder: "Your Name",
         },
         value: "",
+        validation: {
+          required: true,
+          valid: false
+        }
       },
       street: {
         elementType: "input",
@@ -54,6 +59,10 @@ const ContactData = () => {
           placeholder: "Your Street",
         },
         value: "",
+        validation: {
+          required: true,
+          valid: false
+        }
       },
       postCode: {
         elementType: "input",
@@ -62,6 +71,10 @@ const ContactData = () => {
           placeholder: "Post Code",
         },
         value: "",
+        validation: {
+          required: true,
+          valid: false
+        }
       },
       country: {
         elementType: "input",
@@ -70,6 +83,10 @@ const ContactData = () => {
           placeholder: "Country",
         },
         value: "",
+        validation: {
+          required: true,
+          valid: false
+        }
       },
       email: {
         elementType: "input",
@@ -78,6 +95,10 @@ const ContactData = () => {
           placeholder: "Your Email",
         },
         value: "",
+        validation: {
+          required: true,
+          valid: false
+        }
       },
       deliveryMethod: {
         elementType: "select",
@@ -88,6 +109,10 @@ const ContactData = () => {
           ],
         },
         value: "",
+        validation: {
+          required: false,
+          valid: true
+        }
       },
     },
     loading: false,
@@ -95,7 +120,7 @@ const ContactData = () => {
 
   const navigate = useNavigate();
   const checkoutState = useOutletContext<ICheckoutState>();
-
+  let formData = {} as IStringObject
   const [orderData, setOrderData] = useState(initContactData);
 
   const formElementsArray = [] as IOrderFormArray[];
@@ -106,12 +131,26 @@ const ContactData = () => {
       config: orderData.orderForm[key],
     });
   }
+  const checkValidity = (value: string, required: boolean): boolean => {
+    let isValid = false;
+    if (required) {
+      isValid = value.trim() !== ''
+    } else {
+      isValid = true
+    }
+    return isValid
+  }
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>, identifier: string) => {
     const updatedForm = { ...orderData.orderForm }
-    const updatedFormElememnt = { ...updatedForm[identifier] }
-    updatedFormElememnt.value = e.target.value
-    updatedForm[identifier] = updatedFormElememnt
+    const updatedFormElemement = { ...updatedForm[identifier] }
+    const updatedValidation = { ...updatedFormElemement.validation }
+    updatedFormElemement.validation = updatedValidation
+    console.log(checkValidity(e.target.value, updatedValidation.required))
+    updatedFormElemement.value = e.target.value
+    updatedValidation.valid = checkValidity(e.target.value, updatedValidation.required)
+
+
 
     setOrderData(pr => ({ ...pr, orderForm: updatedForm }))
   }
@@ -119,12 +158,19 @@ const ContactData = () => {
   const orderHandler = () => {
     setOrderData((prev) => ({ ...prev, loading: true }));
 
-    const formData = {} as IStringObject
 
-    for (let formKey in orderData.orderForm) {
-      formData[formKey] = orderData.orderForm[formKey].value
-
+    const simplifyStateForm = (orderform: IOrderForm): IStringObject => {
+      let simplifiedForm = {} as IStringObject
+      for (let formKey in orderform) {
+        simplifiedForm[formKey] = orderform[formKey].value
+      }
+      return simplifiedForm
     }
+
+    formData = simplifyStateForm(orderData.orderForm)
+
+
+
 
     const order = {
       ingredients: checkoutState.ingredients,
@@ -132,6 +178,7 @@ const ContactData = () => {
       orderData: formData,
       deliveryMethod: "fastest",
     };
+
     axiosOrders
       .addOrder(order)
       .then((response) => {
