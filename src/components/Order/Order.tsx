@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useSelector } from 'react-redux'
 import { Ingredients } from "../../Interfaces";
 import classes from "./Order.module.css";
 
@@ -6,6 +6,9 @@ interface IProps {
   price: number;
   ingredients: Ingredients;
 }
+
+//temp
+
 
 const Order = (props: IProps) => {
   const ingredients = [] as { name: string; amount: number }[];
