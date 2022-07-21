@@ -5,27 +5,37 @@ interface IConfig {
 }
 
 interface Props {
-
   value: string;
   elementType: string;
+  touched: boolean;
+  invalid: boolean;
   elementConfig: {
-    placeholder?: string
-    type?: string
-    options?: IConfig[]
-
+    placeholder?: string;
+    type?: string;
+    options?: IConfig[];
   };
-  changed: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void
+
+  changed: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => void;
 }
 
 type inputElementType = JSX.Element | null;
 
 const Input = (props: Props) => {
   let inputElement: inputElementType = null;
+  const inputClassesArr = [classes.InputElement];
+  if (props.invalid && props.touched) {
+    inputClassesArr.push(classes.Invalid);
+  }
+  const inputClasses = inputClassesArr.join(" ");
   switch (props.elementType) {
     case "input":
       inputElement = (
         <input
-          className={classes.InputElement}
+          className={inputClasses}
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
@@ -35,7 +45,7 @@ const Input = (props: Props) => {
     case "textArea":
       inputElement = (
         <textarea
-          className={classes.InputElement}
+          className={inputClasses}
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
@@ -45,18 +55,25 @@ const Input = (props: Props) => {
     case "select":
       inputElement = (
         <select
-          className={classes.InputElement}
+          className={inputClasses}
           {...props.elementConfig}
           onChange={props.changed}
-          value={props.value}>
-          {props.elementConfig.options ? props.elementConfig.options.map(option => (<option key={option.value} value={option.value}>{option.displayValue}</option>)) : null}
+          value={props.value}
+        >
+          {props.elementConfig.options
+            ? props.elementConfig.options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.displayValue}
+                </option>
+              ))
+            : null}
         </select>
       );
       break;
     default:
       inputElement = (
         <input
-          className={classes.InputElement}
+          className={inputClasses}
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}

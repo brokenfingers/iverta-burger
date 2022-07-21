@@ -6,22 +6,31 @@ import { useEffect, useState } from "react";
 import { axiosOrders } from "../../../../axios-orders";
 import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
+import { kMaxLength } from "buffer";
 
-type IValidation = { valid: boolean, required: boolean }
+interface IValidRules {
+  required: boolean;
+  minLength?: number;
+  maxLength?: number;
+}
 
+type IValidation = {
+  valid: boolean;
+  rules: IValidRules;
+};
 
 interface InputElement {
   elementType: string;
   elementConfig: {
     // [key: string]: string,
-    placeholder?: string
-    type?: string
-    options?: IStringObject[]
+    placeholder?: string;
+    type?: string;
+    options?: IStringObject[];
   };
+  touched: boolean;
   value: string;
-  validation: IValidation
+  validation: IValidation;
 }
-
 
 interface IOrderForm {
   [key: string]: InputElement;
@@ -35,6 +44,7 @@ interface IOrderFormArray {
 interface IContactData {
   orderForm: IOrderForm;
   loading: boolean;
+  formIsValid: boolean;
 }
 
 const ContactData = () => {
@@ -47,10 +57,13 @@ const ContactData = () => {
           placeholder: "Your Name",
         },
         value: "",
+        touched: false,
         validation: {
-          required: true,
-          valid: false
-        }
+          rules: {
+            required: true,
+          },
+          valid: false,
+        },
       },
       street: {
         elementType: "input",
@@ -59,10 +72,13 @@ const ContactData = () => {
           placeholder: "Your Street",
         },
         value: "",
+        touched: false,
         validation: {
-          required: true,
-          valid: false
-        }
+          rules: {
+            required: true,
+          },
+          valid: false,
+        },
       },
       postCode: {
         elementType: "input",
@@ -71,10 +87,15 @@ const ContactData = () => {
           placeholder: "Post Code",
         },
         value: "",
+        touched: false,
         validation: {
-          required: true,
-          valid: false
-        }
+          rules: {
+            required: true,
+            minLength: 5,
+            maxLength: 5,
+          },
+          valid: false,
+        },
       },
       country: {
         elementType: "input",
@@ -83,10 +104,13 @@ const ContactData = () => {
           placeholder: "Country",
         },
         value: "",
+        touched: false,
         validation: {
-          required: true,
-          valid: false
-        }
+          rules: {
+            required: true,
+          },
+          valid: false,
+        },
       },
       email: {
         elementType: "input",
@@ -95,10 +119,13 @@ const ContactData = () => {
           placeholder: "Your Email",
         },
         value: "",
+        touched: false,
         validation: {
-          required: true,
-          valid: false
-        }
+          rules: {
+            required: true,
+          },
+          valid: false,
+        },
       },
       deliveryMethod: {
         elementType: "select",
@@ -109,18 +136,22 @@ const ContactData = () => {
           ],
         },
         value: "",
+        touched: false,
         validation: {
-          required: false,
-          valid: true
-        }
+          rules: {
+            required: true,
+          },
+          valid: true,
+        },
       },
     },
+    formIsValid: true,
     loading: false,
   };
 
   const navigate = useNavigate();
   const checkoutState = useOutletContext<ICheckoutState>();
-  let formData = {} as IStringObject
+  let formData = {} as IStringObject;
   const [orderData, setOrderData] = useState(initContactData);
 
   const formElementsArray = [] as IOrderFormArray[];
@@ -131,46 +162,86 @@ const ContactData = () => {
       config: orderData.orderForm[key],
     });
   }
-  const checkValidity = (value: string, required: boolean): boolean => {
-    let isValid = false;
-    if (required) {
-      isValid = value.trim() !== ''
-    } else {
-      isValid = true
+  const checkValidity = (value: string, rules: IValidRules): boolean => {
+    let isValid = true;
+    if (!rules.required) return isValid;
+    if (rules.required) isValid = value.trim() !== "";
+    if (rules.minLength) {
+      isValid = value.trim().length >= rules.minLength && isValid;
     }
-    return isValid
-  }
+    if (rules.maxLength) {
+      isValid = value.trim().length <= rules.maxLength && isValid;
+    }
+    return isValid;
+  };
 
-  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>, identifier: string) => {
-    const updatedForm = { ...orderData.orderForm }
-    const updatedFormElemement = { ...updatedForm[identifier] }
-    const updatedValidation = { ...updatedFormElemement.validation }
-    updatedFormElemement.validation = updatedValidation
-    console.log(checkValidity(e.target.value, updatedValidation.required))
-    updatedFormElemement.value = e.target.value
-    updatedValidation.valid = checkValidity(e.target.value, updatedValidation.required)
+  const inputChangeHandler = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+    identifier: string
+  ) => {
+    let orderForm = { ...orderData.orderForm };
+    const selectedElement = { ...orderForm[identifier] };
+    selectedElement.value = e.target.value;
+    selectedElement.touched = true;
+    selectedElement.validation = {
+      ...selectedElement.validation,
+      valid: checkValidity(e.target.value, selectedElement.validation.rules),
+    };
+    orderForm = { ...orderData.orderForm, [identifier]: selectedElement };
+    setOrderData((pr) => ({ ...pr, orderForm: orderForm }));
+    if (!formInputsAreValid(orderData.orderForm)) {
+      setOrderData((pr) => ({ ...pr, formIsValid: true }));
+    }
+  };
 
+  useEffect(() => {});
 
+  const formInputsAreValid = (orderForm: IOrderForm): boolean => {
+    let isValid = true;
+    for (let form in orderForm) {
+      if (!orderForm[form].validation.valid) {
+        isValid = false;
+        break;
+      }
+    }
+    return isValid;
+  };
 
-    setOrderData(pr => ({ ...pr, orderForm: updatedForm }))
-  }
+  const touchAllInputs = (ContData: IContactData): IOrderForm => {
+    let orderForm = { ...ContData.orderForm };
+    for (let form in orderForm) {
+      const elementData = orderForm[form];
+      elementData.touched = true;
+      orderForm = { ...orderForm, [form]: elementData };
+    }
+    return orderForm;
+  };
 
   const orderHandler = () => {
-    setOrderData((prev) => ({ ...prev, loading: true }));
-
-
-    const simplifyStateForm = (orderform: IOrderForm): IStringObject => {
-      let simplifiedForm = {} as IStringObject
-      for (let formKey in orderform) {
-        simplifiedForm[formKey] = orderform[formKey].value
-      }
-      return simplifiedForm
+    if (!formInputsAreValid(orderData.orderForm)) {
+      setOrderData((prev) => ({
+        ...prev,
+        formIsValid: false,
+        orderForm: touchAllInputs(prev),
+      }));
+      return;
+    } else {
+      setOrderData((prev) => ({ ...prev, formIsValid: true }));
     }
 
-    formData = simplifyStateForm(orderData.orderForm)
+    setOrderData((prev) => ({ ...prev, loading: true }));
 
+    const simplifyStateForm = (orderform: IOrderForm): IStringObject => {
+      let simplifiedForm = {} as IStringObject;
+      for (let formKey in orderform) {
+        simplifiedForm[formKey] = orderform[formKey].value;
+      }
+      return simplifiedForm;
+    };
 
-
+    formData = simplifyStateForm(orderData.orderForm);
 
     const order = {
       ingredients: checkoutState.ingredients,
@@ -194,14 +265,22 @@ const ContactData = () => {
     <form onSubmit={orderHandler}>
       {formElementsArray.map((formElement) => (
         <Input
+          touched={formElement.config.touched}
+          invalid={!formElement.config.validation.valid}
           key={formElement.id}
           value={formElement.config.value}
           elementType={formElement.config.elementType}
           elementConfig={formElement.config.elementConfig}
-          changed={e => { inputChangeHandler(e, formElement.id) }}
+          changed={(e) => {
+            inputChangeHandler(e, formElement.id);
+          }}
         />
       ))}
-      <Button btnType="Success" clicked={orderHandler}>
+      <Button
+        disabled={!orderData.formIsValid}
+        btnType="Success"
+        clicked={orderHandler}
+      >
         ORDER
       </Button>
     </form>
