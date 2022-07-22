@@ -1,11 +1,18 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Button from "../../../../components/UI/Button/Button";
-import { ICheckoutState, IStringObject } from "../../../../Interfaces";
+import {
+  ICheckoutState,
+  Ingredients,
+  IStringObject,
+} from "../../../../Interfaces";
 import classes from "./ContactData.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { axiosOrders } from "../../../../axios-orders";
 import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
+import { connect } from "react-redux";
+import { RootState } from "../../../../store/store";
+import { produceWithPatches } from "immer";
 
 interface IValidRules {
   required: boolean;
@@ -46,7 +53,7 @@ interface IContactData {
   formIsValid: boolean;
 }
 
-const ContactData = () => {
+const ContactData = (props: { ing: Ingredients; price: number }) => {
   const initContactData: IContactData = {
     orderForm: {
       name: {
@@ -195,8 +202,6 @@ const ContactData = () => {
     }
   };
 
-  useEffect(() => {});
-
   const formInputsAreValid = (orderForm: IOrderForm): boolean => {
     let isValid = true;
     for (let form in orderForm) {
@@ -243,8 +248,8 @@ const ContactData = () => {
     formData = simplifyStateForm(orderData.orderForm);
 
     const order = {
-      ingredients: checkoutState.ingredients,
-      price: checkoutState.price,
+      ingredients: props.ing,
+      price: props.price,
       orderData: formData,
       deliveryMethod: "fastest",
     };
@@ -296,4 +301,12 @@ const ContactData = () => {
   );
 };
 
-export default ContactData;
+const mapStateToProps = (state: RootState) => {
+  return {
+    ing: state.ingredients,
+    price: state.totalPrice,
+  };
+};
+
+export default connect(mapStateToProps)(ContactData);
+// export default ContactData;

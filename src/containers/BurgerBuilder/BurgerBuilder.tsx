@@ -17,13 +17,6 @@ import {
 } from "react-router-dom";
 import { AppDispatch, RootState } from "../../store/store";
 
-const INGREDIENT_PRICES = {
-  salad: 0.5,
-  cheese: 0.4,
-  meat: 1.3,
-  bacon: 0.7,
-};
-
 export type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 export type mapStateToPropsType = ReturnType<typeof mapStateToProsp>;
 export type BurgerBuilderType = ReturnType<typeof BurgerBuilder>;
@@ -32,14 +25,12 @@ export type BurgerBuilderPropsType = mapDispatchToPropsType &
   mapStateToPropsType;
 
 export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
-  const initState: IBugerBuilderState = {
-    ingredients: {} as Ingredients,
-    totalPrice: 4,
-    purchasable: false,
+  const initState = {
     purchasing: false,
     loading: false,
     error: false,
   };
+
   const navigate = useNavigate();
   const [state, setState] = useState(initState);
   const purchaseHandler = () => {
@@ -57,65 +48,19 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
       });
   }, []);
 
-  const updatePurchaseState = (ingredients: { [key: string]: number }) => {
+  const updatePurchaseState = (ingredients: Ingredients) => {
     const sum = Object.keys(ingredients)
-      .map((igKey) => ingredients[igKey])
+      .map((igKey) => ingredients[igKey as keyof Ingredients])
       .reduce((newSum, el) => newSum + el, 0);
-    setState((prev) => ({ ...prev, purchasable: sum > 0 }));
+    return sum > 0;
   };
 
-  const addIngredientHandles = (type: keyof Ingredients) => {
-    const oldCount = props.ings[type];
-    const updatedCount = oldCount + 1;
-    const updatedIngredients = {
-      ...props.ings,
-    };
-    updatedIngredients[type] = updatedCount;
-    const priceAddition = INGREDIENT_PRICES[type];
-    const oldPrice = state.totalPrice;
-    const newPrice = oldPrice + priceAddition;
-    setState((prev) => ({
-      ...prev,
-      totalPrice: newPrice,
-      ingredients: updatedIngredients,
-    }));
-    updatePurchaseState(updatedIngredients);
-  };
   const purchaseCancelHandler = () => {
     setState((prev) => ({ ...prev, purchasing: false }));
   };
 
   const purchaseContinueHandler = () => {
-    const search = Object.entries(props.ings).map((arr) =>
-      arr.map((arr2) => arr2)
-    ) as ParamKeyValuePair[];
-    search.push(["price", state.totalPrice.toString()]);
-
-    navigate({
-      pathname: "/checkout",
-      search: `?${createSearchParams(search)}`,
-    });
-  };
-
-  const removeIngredientHandles = (type: keyof Ingredients) => {
-    const oldCount = props.ings[type];
-    if (oldCount <= 0) {
-      return;
-    }
-    const updatedCount = oldCount - 1;
-    const updatedIngredients = {
-      ...props.ings,
-    };
-    updatedIngredients[type] = updatedCount;
-    const priceDeduction = INGREDIENT_PRICES[type];
-    const oldPrice = state.totalPrice;
-    const newPrice = oldPrice - priceDeduction;
-    setState((prev) => ({
-      ...prev,
-      totalPrice: newPrice,
-      ingredients: updatedIngredients,
-    }));
-    updatePurchaseState(updatedIngredients);
+    navigate({ pathname: "/checkout" });
   };
 
   const disabledInfo: { [key: string]: number | boolean } = {
@@ -133,11 +78,11 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
       <Aux>
         <Burger ingredients={props.ings} />
         <BuildControls
-          ingredientAdded={addIngredientHandles}
-          ingredientRemove={removeIngredientHandles}
+          ingredientAdded={props.onIngredientAdded}
+          ingredientRemove={props.onIngredientRemoved}
           disabled={disabledInfo}
-          price={state.totalPrice}
-          purchasable={state.purchasable}
+          price={props.price}
+          purchasable={updatePurchaseState(props.ings)}
           ordered={purchaseHandler}
         />
       </Aux>
@@ -148,7 +93,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
         ingredients={props.ings}
         purchaseCanceled={purchaseCancelHandler}
         purchaseContinued={purchaseContinueHandler}
-        price={state.totalPrice}
+        price={props.price}
       />
     );
     if (state.loading) {
@@ -169,6 +114,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
 const mapStateToProsp = (state: RootState) => {
   return {
     ings: state.ingredients,
+    price: state.totalPrice,
   };
 };
 
@@ -182,6 +128,7 @@ const mapDispatchToProps = (dispatch: AppDispatch) => {
 };
 
 // export default BurgerBuilder
+
 export default connect(
   mapStateToProsp,
   mapDispatchToProps

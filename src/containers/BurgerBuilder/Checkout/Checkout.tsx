@@ -1,40 +1,18 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, Outlet } from "react-router-dom";
+import { connect } from "react-redux";
+import { RootState } from "../../../store/store";
+import { useNavigate, Outlet } from "react-router-dom";
 import CheckoutSummary from "../../../components/Order/CheckoutSummary/CheckoutSummary";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import { ICheckoutState, Ingredients } from "../../../Interfaces";
+import { Ingredients } from "../../../Interfaces";
 
-const Checkout = () => {
-  const initState: ICheckoutState = {
-    ingredients: {} as Ingredients,
-    price: 0,
-  };
-  const [checkoutState, setCheckoutState] = useState(initState);
-  const [searchParams] = useSearchParams();
+const Checkout = (props: { ings: Ingredients }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let stateUpdate = { ingredients: {} } as ICheckoutState;
-    searchParams.forEach((value, key) => {
-      if (key === "price") {
-        stateUpdate[key] = +value;
-      } else {
-        stateUpdate.ingredients[key as keyof Ingredients] = +value;
-      }
-    });
-
-    setCheckoutState((prev) => ({
-      ...prev,
-      ingredients: stateUpdate.ingredients,
-      price: stateUpdate.price,
-    }));
-  }, []);
-
   let checkoutJSX = <Spinner />;
-  if (Object.keys(checkoutState.ingredients).length) {
+  if (Object.keys(props.ings).length) {
     checkoutJSX = (
       <CheckoutSummary
-        ingredients={checkoutState.ingredients}
+        ingredients={props.ings}
         checkoutCanceled={() => {
           navigate(-1);
         }}
@@ -48,9 +26,15 @@ const Checkout = () => {
   return (
     <div>
       {checkoutJSX}
-      <Outlet context={checkoutState} />
+      <Outlet context={props} />
     </div>
   );
 };
 
-export default Checkout;
+const mapStateToProps = (state: RootState) => {
+  return {
+    ings: state.ingredients,
+  };
+};
+
+export default connect(mapStateToProps)(Checkout);

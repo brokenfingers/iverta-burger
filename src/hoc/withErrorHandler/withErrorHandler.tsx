@@ -1,10 +1,8 @@
 import Modal from "../../components/UI/Modal/Modal";
 import Aux from "../Auxx/Auxx";
 
-import { ClassType, Component } from "react";
+import { Component } from "react";
 import { AxiosInstance } from "axios";
-import { BurgerBuilderPropsType } from "../../containers/BurgerBuilder/BurgerBuilder";
-import { ClassExpression } from "typescript";
 
 const withErrorHandler = <T extends Function, P>(
   WrappedComponent: T,

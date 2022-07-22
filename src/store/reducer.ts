@@ -16,6 +16,13 @@ interface IAction {
   ingredientName: keyof Ingredients;
 }
 
+const INGREDIENT_PRICES = {
+  salad: 0.5,
+  cheese: 0.4,
+  meat: 1.3,
+  bacon: 0.7,
+};
+
 const reducer = (state = initialState, action: IAction) => {
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
@@ -25,14 +32,20 @@ const reducer = (state = initialState, action: IAction) => {
           ...state.ingredients,
           [action.ingredientName]: state.ingredients["salad"] + 1,
         },
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
       };
     case actionTypes.REMOVE_INGREDIENT:
       return {
         ...state,
         ingredients: {
           ...state.ingredients,
-          [action.ingredientName]: state.ingredients["salad"] - 1,
+          [action.ingredientName]: state.ingredients["salad"]
+            ? state.ingredients["salad"] - 1
+            : 0,
         },
+        totalPrice:
+          state.ingredients["salad"] &&
+          state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
       };
     default:
       return state;
