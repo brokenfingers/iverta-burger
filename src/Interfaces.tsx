@@ -1,10 +1,9 @@
-export interface Ingredients {
-  // [key: string]: number;
-  salad: number;
-  meat: number;
-  cheese: number;
-  bacon: number;
-}
+
+export type IngredientNames = 'salad' | 'meat' | 'cheese' | 'bacon'
+
+export type Ingredients = { [K in IngredientNames]: number }
+
+
 
 export interface IBugerBuilderState {
   ingredients: Ingredients;
@@ -31,3 +30,5 @@ export interface IOrder {
   deliveryMethod: string;
   id?: string; //used in Order.tsx
 }
+
+export type InputTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement

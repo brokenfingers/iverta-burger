@@ -3,6 +3,7 @@ import Button from "../../../../components/UI/Button/Button";
 import {
   ICheckoutState,
   Ingredients,
+  InputTypes,
   IStringObject,
 } from "../../../../Interfaces";
 import classes from "./ContactData.module.css";
@@ -12,7 +13,7 @@ import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
 import { connect } from "react-redux";
 import { RootState } from "../../../../store/store";
-import { produceWithPatches } from "immer";
+
 
 interface IValidRules {
   required: boolean;
@@ -28,7 +29,6 @@ type IValidation = {
 interface InputElement {
   elementType: string;
   elementConfig: {
-    // [key: string]: string,
     placeholder?: string;
     type?: string;
     options?: IStringObject[];
@@ -182,9 +182,7 @@ const ContactData = (props: { ing: Ingredients; price: number }) => {
   };
 
   const inputChangeHandler = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    e: React.ChangeEvent<InputTypes>,
     identifier: string
   ) => {
     let orderForm = { ...orderData.orderForm };
@@ -309,4 +307,4 @@ const mapStateToProps = (state: RootState) => {
 };
 
 export default connect(mapStateToProps)(ContactData);
-// export default ContactData;
+

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Aux from "../../../hoc/Auxx/Auxx";
-import { Ingredients } from "../../../Interfaces";
+import { IngredientNames, Ingredients } from "../../../Interfaces";
 import Button from "../../UI/Button/Button";
 
 interface Props {
@@ -19,7 +19,7 @@ class OrderSummary extends Component<Props> {
       (igKey) => (
         <li key={igKey}>
           <span style={{ textTransform: "capitalize" }}>{igKey}</span>:{" "}
-          {this.props.ingredients[igKey as keyof Ingredients]}{" "}
+          {this.props.ingredients[igKey as IngredientNames]}{" "}
         </li>
       )
     );

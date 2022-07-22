@@ -1,4 +1,4 @@
-import { Ingredients } from "../Interfaces";
+import { IngredientNames, Ingredients } from "../Interfaces";
 import * as actionTypes from "./actions";
 
 const initialState = {
@@ -12,8 +12,8 @@ const initialState = {
 };
 
 interface IAction {
-  type: string;
-  ingredientName: keyof Ingredients;
+  type: keyof typeof actionTypes
+  ingredientName: IngredientNames;
 }
 
 const INGREDIENT_PRICES = {

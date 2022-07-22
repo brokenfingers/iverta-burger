@@ -1,3 +1,4 @@
+import { InputTypes } from "../../../Interfaces";
 import classes from "./Input.module.css";
 
 interface IConfig {
@@ -16,9 +17,7 @@ interface Props {
   };
 
   changed: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<InputTypes>
   ) => void;
 }
 
@@ -62,10 +61,10 @@ const Input = (props: Props) => {
         >
           {props.elementConfig.options
             ? props.elementConfig.options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.displayValue}
-                </option>
-              ))
+              <option key={option.value} value={option.value}>
+                {option.displayValue}
+              </option>
+            ))
             : null}
         </select>
       );

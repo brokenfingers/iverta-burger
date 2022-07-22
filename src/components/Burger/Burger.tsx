@@ -1,4 +1,4 @@
-import { Ingredients } from "../../Interfaces";
+import { IngredientNames, Ingredients } from "../../Interfaces";
 import classes from "./Burger.module.css";
 import BurgerIngredients from "./BurgerIngredients/BurgerIngredients";
 
@@ -12,7 +12,7 @@ const Burger = (props: Props) => {
     ingredients
   )
     .map((ingrKey) => {
-      return [...Array(ingredients[ingrKey as keyof Ingredients])].map(
+      return [...Array(ingredients[ingrKey as IngredientNames])].map(
         (_, i) => {
           return <BurgerIngredients key={ingrKey + i} type={ingrKey} />;
         }

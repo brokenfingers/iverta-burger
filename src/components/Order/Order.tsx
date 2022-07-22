@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Ingredients } from "../../Interfaces";
+import { IngredientNames, Ingredients } from "../../Interfaces";
 import classes from "./Order.module.css";
 
 interface IProps {
@@ -12,7 +12,7 @@ const Order = (props: IProps) => {
   for (let ingredientName in props.ingredients) {
     ingredients.push({
       name: ingredientName,
-      amount: props.ingredients[ingredientName as keyof Ingredients],
+      amount: props.ingredients[ingredientName as IngredientNames],
     });
   }
 

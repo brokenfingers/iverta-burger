@@ -1,17 +1,17 @@
-import { Ingredients } from "../../../Interfaces";
+import { IngredientNames, Ingredients } from "../../../Interfaces";
 import classes from "./BuildControls.module.css";
 import BuildControl from "./BuiltControl/BuildControl";
 
 interface Props {
-  ingredientAdded: (type: keyof Ingredients) => void;
-  ingredientRemove: (type: keyof Ingredients) => void;
+  ingredientAdded: (type: IngredientNames) => void;
+  ingredientRemove: (type: IngredientNames) => void;
   disabled: { [key: string]: number | boolean };
   price: number;
   purchasable: boolean;
   ordered: () => void;
 }
 
-const controls: { label: string; type: keyof Ingredients }[] = [
+const controls: { label: string; type: IngredientNames }[] = [
   { label: "Salad", type: "salad" },
   { label: "Bacon", type: "bacon" },
   { label: "Cheese", type: "cheese" },
