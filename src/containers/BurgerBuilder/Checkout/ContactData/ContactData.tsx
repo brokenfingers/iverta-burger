@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { axiosOrders } from "../../../../axios-orders";
 import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
-import { kMaxLength } from "buffer";
 
 interface IValidRules {
   required: boolean;

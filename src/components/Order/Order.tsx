@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import { Ingredients } from "../../Interfaces";
 import classes from "./Order.module.css";
 
@@ -7,15 +7,12 @@ interface IProps {
   ingredients: Ingredients;
 }
 
-//temp
-
-
 const Order = (props: IProps) => {
   const ingredients = [] as { name: string; amount: number }[];
   for (let ingredientName in props.ingredients) {
     ingredients.push({
       name: ingredientName,
-      amount: props.ingredients[ingredientName],
+      amount: props.ingredients[ingredientName as keyof Ingredients],
     });
   }
 

@@ -1,5 +1,9 @@
 export interface Ingredients {
-  [key: string]: number;
+  // [key: string]: number;
+  salad: number;
+  meat: number;
+  cheese: number;
+  bacon: number;
 }
 
 export interface IBugerBuilderState {
@@ -23,7 +27,7 @@ export interface IStringObject {
 export interface IOrder {
   ingredients: Ingredients;
   price: number;
-  orderData: IStringObject
+  orderData: IStringObject;
   deliveryMethod: string;
   id?: string; //used in Order.tsx
 }

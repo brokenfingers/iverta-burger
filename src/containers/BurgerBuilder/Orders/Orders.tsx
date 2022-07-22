@@ -23,12 +23,10 @@ const Orders = () => {
         return { ...response, loading: false };
       })
       .catch((err) => ({ ...state, loading: false }));
-  }, [])
-
+  }, []);
 
   useEffect(() => {
-    fetchOrders()
-
+    fetchOrders();
   }, [fetchOrders]);
 
   return (

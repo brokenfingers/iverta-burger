@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Outlet } from "react-router-dom";
 import CheckoutSummary from "../../../components/Order/CheckoutSummary/CheckoutSummary";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import { ICheckoutState } from "../../../Interfaces";
+import { ICheckoutState, Ingredients } from "../../../Interfaces";
 
 const Checkout = () => {
   const initState: ICheckoutState = {
-    ingredients: {},
+    ingredients: {} as Ingredients,
     price: 0,
   };
   const [checkoutState, setCheckoutState] = useState(initState);
@@ -19,7 +19,7 @@ const Checkout = () => {
       if (key === "price") {
         stateUpdate[key] = +value;
       } else {
-        stateUpdate["ingredients"][key] = +value;
+        stateUpdate.ingredients[key as keyof Ingredients] = +value;
       }
     });
 

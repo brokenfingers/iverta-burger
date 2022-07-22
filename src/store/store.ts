@@ -1,16 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit'
-import ingredientReducer from './reducers/ingredientReducer'
-import reducer from './reducers/reducer'
+import { createStore } from "redux";
+import reducer from "../store/reducer";
 
-const store = configureStore({
-    reducer: {
-        ingredients: ingredientReducer
-    },
-})
+const store = createStore(reducer);
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export default store
+export default store;

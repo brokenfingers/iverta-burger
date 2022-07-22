@@ -1,10 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { IOrder } from "./Interfaces";
+import { Ingredients, IOrder } from "./Interfaces";
 // import axios, { AxiosRequestConfig } from 'axios'
-
-interface Ingredients {
-  [key: string]: number;
-}
 
 export interface iResponse {
   data: IOrder;
