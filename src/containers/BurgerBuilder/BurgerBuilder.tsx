@@ -1,11 +1,11 @@
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Modal from "../../components/UI/Modal/Modal";
 import Aux from "../../hoc/Auxx/Auxx";
 import { connect } from "react-redux";
-import Axios, { axiosOrders } from "../../axios-orders";
+import Axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import { Ingredients, IBugerBuilderState, IngredientNames } from "../../Interfaces";
@@ -24,8 +24,7 @@ export type BurgerBuilderPropsType = mapDispatchToPropsType &
 export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
   const initState = {
     purchasing: false,
-    loading: false,
-    error: false,
+
   };
 
   const navigate = useNavigate();
@@ -34,16 +33,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
     setState((prev) => ({ ...prev, purchasing: true }));
   };
 
-  useEffect(() => {
-    axiosOrders
-      .getIngredients()
-      .then((response) =>
-        setState((prev) => ({ ...prev, ingredients: response }))
-      )
-      .catch((error) => {
-        setState((prev) => ({ ...prev, error: true }));
-      });
-  }, []);
+
 
   const updatePurchaseState = (ingredients: Ingredients) => {
     const sum = Object.keys(ingredients)
@@ -69,7 +59,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
   }
   let orderSummary = null;
 
-  let burger = state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
+  let burger = props.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
   if (Object.keys(props.ings).length) {
     burger = (
       <Aux>
@@ -93,9 +83,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
         price={props.price}
       />
     );
-    if (state.loading) {
-      orderSummary = <Spinner />;
-    }
+
   }
   console.log(props);
   return (

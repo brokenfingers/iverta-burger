@@ -2,13 +2,9 @@ import { IBurgerBuilderActionType, IngredientNames, Ingredients } from "../../In
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-  ingredients: {
-    salad: 0,
-    bacon: 0,
-    cheese: 0,
-    meat: 0,
-  },
+  ingredients: {} as Ingredients,
   totalPrice: 4,
+  error: false
 };
 
 
