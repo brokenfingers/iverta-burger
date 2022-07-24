@@ -1,4 +1,4 @@
-
+import * as actionTypes from './store/actions/actionTypes'
 export type IngredientNames = 'salad' | 'meat' | 'cheese' | 'bacon'
 
 export type Ingredients = { [K in IngredientNames]: number }
@@ -32,3 +32,8 @@ export interface IOrder {
 }
 
 export type InputTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+
+export interface IBurgerBuilderActionType {
+  type: keyof typeof actionTypes
+  ingredientName: IngredientNames;
+}

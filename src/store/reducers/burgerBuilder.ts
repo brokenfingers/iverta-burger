@@ -1,5 +1,5 @@
-import { IngredientNames, Ingredients } from "../Interfaces";
-import * as actionTypes from "./actions";
+import { IBurgerBuilderActionType, IngredientNames, Ingredients } from "../../Interfaces";
+import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   ingredients: {
@@ -11,10 +11,7 @@ const initialState = {
   totalPrice: 4,
 };
 
-interface IAction {
-  type: keyof typeof actionTypes
-  ingredientName: IngredientNames;
-}
+
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -23,7 +20,7 @@ const INGREDIENT_PRICES = {
   bacon: 0.7,
 };
 
-const reducer = (state = initialState, action: IAction) => {
+const reducer = (state = initialState, action: IBurgerBuilderActionType) => {
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
       return {

@@ -8,14 +8,11 @@ import { connect } from "react-redux";
 import Axios, { axiosOrders } from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import { Ingredients, IBugerBuilderState } from "../../Interfaces";
-import * as actionTypes from "../../store/actions";
-import {
-  createSearchParams,
-  ParamKeyValuePair,
-  useNavigate,
-} from "react-router-dom";
+import { Ingredients, IBugerBuilderState, IngredientNames } from "../../Interfaces";
+
+import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../store/store";
+import * as burgerBuilderActions from '../../store/actions/index'
 
 export type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 export type mapStateToPropsType = ReturnType<typeof mapStateToProsp>;
@@ -120,10 +117,10 @@ const mapStateToProsp = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: AppDispatch) => {
   return {
-    onIngredientAdded: (ingredientName: keyof Ingredients) =>
-      dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName }),
-    onIngredientRemoved: (ingredientName: keyof Ingredients) =>
-      dispatch({ type: actionTypes.REMOVE_INGREDIENT, ingredientName }),
+    onIngredientAdded: (ingredientName: IngredientNames) =>
+      dispatch(burgerBuilderActions.addIngredient(ingredientName)),
+    onIngredientRemoved: (ingredientName: IngredientNames) =>
+      dispatch(burgerBuilderActions.removeIngredient(ingredientName)),
   };
 };
 
