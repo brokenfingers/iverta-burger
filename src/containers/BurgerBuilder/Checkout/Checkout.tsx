@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { RootState } from "../../../store/store";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, Navigate } from "react-router-dom";
 import CheckoutSummary from "../../../components/Order/CheckoutSummary/CheckoutSummary";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import { Ingredients } from "../../../Interfaces";
@@ -8,7 +8,7 @@ import { Ingredients } from "../../../Interfaces";
 const Checkout = (props: { ings: Ingredients }) => {
   const navigate = useNavigate();
 
-  let checkoutJSX = <Spinner />;
+  let checkoutJSX = <Navigate to="/" />;
   if (Object.keys(props.ings).length) {
     checkoutJSX = (
       <CheckoutSummary
@@ -33,7 +33,7 @@ const Checkout = (props: { ings: Ingredients }) => {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    ings: state.ingredients,
+    ings: state.burgerBuilder.ingredients,
   };
 };
 

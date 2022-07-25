@@ -52,7 +52,6 @@ interface IOrderFormArray {
 
 interface IContactData {
   orderForm: IOrderForm;
-  loading: boolean;
   formIsValid: boolean;
 }
 
@@ -144,7 +143,7 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
             { value: "cheapest", displayValue: "Cheapest" },
           ],
         },
-        value: "",
+        value: "fastest",
         touched: false,
         validation: {
           rules: {
@@ -155,7 +154,6 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
       },
     },
     formIsValid: true,
-    loading: false,
   };
 
   const navigate = useNavigate();
@@ -291,7 +289,7 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
       </Button>
     </form>
   );
-  if (orderData.loading) {
+  if (props.loading) {
     form = <Spinner />;
   }
 
@@ -305,10 +303,11 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
 
 type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: RootState & { loading: boolean }) => {
   return {
-    ing: state.ingredients,
-    price: state.totalPrice,
+    ing: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    loading: state.order.loading,
   };
 };
 
@@ -317,9 +316,12 @@ type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     onOrderBurger: (orderData: IOrder) => {
-      dispatch(actions.purchaseBurgerStart(orderData));
+      dispatch(actions.purchaseBurger(orderData));
     },
   };
 };
 
-export default connect(mapStateToProps)(withErrorHandler(ContactData, axios));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));

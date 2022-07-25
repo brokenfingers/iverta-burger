@@ -1,8 +1,15 @@
 import { useDispatch } from "react-redux";
-import { createStore, compose, applyMiddleware, AnyAction, Store } from "redux";
+import {
+  createStore,
+  compose,
+  applyMiddleware,
+  AnyAction,
+  Store,
+  combineReducers,
+} from "redux";
 import thunk, { ThunkDispatch } from "redux-thunk";
-
-import reducer from "./reducers/burgerBuilder";
+import orderReducer from "./reducers/order";
+import burgerBuilderReducer from "./reducers/burgerBuilder";
 
 declare global {
   interface Window {
@@ -10,10 +17,18 @@ declare global {
   }
 }
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+const rootReducer = combineReducers({
+  burgerBuilder: burgerBuilderReducer,
+  order: orderReducer,
+});
 
-export type TAppState = ReturnType<typeof reducer>;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk))
+);
+
+export type TAppState = ReturnType<typeof burgerBuilderReducer>;
 export type TDispatch = ThunkDispatch<TAppState, void, AnyAction>;
 export type TStore = Store<TAppState, AnyAction> & { dispatch: TDispatch };
 

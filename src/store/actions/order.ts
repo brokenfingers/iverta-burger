@@ -3,7 +3,7 @@ import { axiosOrders } from "../../axios-orders";
 import { TDispatch } from "../store";
 import { IOrder } from "../../Interfaces";
 
-export const purchaseBurgerSuccess = (id: number, orderData: IOrder) => {
+export const purchaseBurgerSuccess = (id: string, orderData: IOrder) => {
   return {
     type: actionTypes.PURCHASE_BURGER_SUCCESS,
     orderId: id,
@@ -17,14 +17,19 @@ export const purchaseBurgerFail = (error: { message: string }) => {
   };
 };
 
-export const purchaseBurgerStart = (orderData: IOrder) => {
+export const purchaseBurgerStart = () => {
+  return {
+    type: actionTypes.PURCHASE_BURGER_START,
+  };
+};
+
+export const purchaseBurger = (orderData: IOrder) => {
   return (dispatch: TDispatch) => {
+    dispatch(purchaseBurgerStart());
     axiosOrders
       .addOrder(orderData)
       .then((response) => {
-        if (response.id) {
-          dispatch(purchaseBurgerSuccess(+response.id, orderData));
-        }
+        dispatch(purchaseBurgerSuccess(response.name, orderData));
       })
       .catch((err) => {
         dispatch(purchaseBurgerFail(err));

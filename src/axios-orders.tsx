@@ -24,12 +24,14 @@ const orderRequests = {
   // delete: (url: string) => instance.delete<Book>(url).then(responseBody),
 };
 
+type addOrderReturn = { name: string };
+
 export const axiosOrders = {
   getIngredients: (): Promise<Ingredients> =>
     orderRequests.get("/ingredients.json"),
   getOrders: (): Promise<IOrder[]> => orderRequests.get("/orders.json"),
   // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
-  addOrder: (order: IOrder): Promise<IOrder> =>
+  addOrder: (order: IOrder): Promise<addOrderReturn> =>
     orderRequests.post("/orders.json", order),
   // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
 };
