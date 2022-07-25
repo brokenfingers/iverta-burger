@@ -1,6 +1,5 @@
-import { Action } from "redux";
+
 import {
-  IBurgerBuilderActionType,
   IngredientNames,
   Ingredients,
 } from "../../Interfaces";
@@ -88,7 +87,6 @@ const reducer = (state = initialState, action: actionTypeSelection) => {
     default:
       return newState;
   }
-  return newState;
 };
 
 export default reducer;

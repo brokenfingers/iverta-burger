@@ -18,8 +18,8 @@ declare global {
 }
 
 const rootReducer = combineReducers({
-  burgerBuilder: burgerBuilderReducer,
   order: orderReducer,
+  burgerBuilder: burgerBuilderReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

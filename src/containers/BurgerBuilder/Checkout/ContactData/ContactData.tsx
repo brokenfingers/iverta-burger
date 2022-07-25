@@ -289,6 +289,7 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
       </Button>
     </form>
   );
+
   if (props.loading) {
     form = <Spinner />;
   }
@@ -303,7 +304,7 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
 
 type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
 
-const mapStateToProps = (state: RootState & { loading: boolean }) => {
+const mapStateToProps = (state: RootState & { loading: boolean, orders: IOrder[] }) => {
   return {
     ing: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
