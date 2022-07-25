@@ -4,6 +4,7 @@ import { TDispatch } from "../store";
 import { IOrder } from "../../Interfaces";
 
 export const purchaseBurgerSuccess = (id: string, orderData: IOrder) => {
+
   return {
     type: actionTypes.PURCHASE_BURGER_SUCCESS,
     orderId: id,
@@ -36,3 +37,9 @@ export const purchaseBurger = (orderData: IOrder) => {
       });
   };
 };
+
+export const purchaseInit = () => {
+  return {
+    type: actionTypes.PURCHASE_INIT
+  }
+}

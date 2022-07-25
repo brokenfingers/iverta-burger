@@ -12,7 +12,7 @@ import { Ingredients, IngredientNames } from "../../Interfaces";
 
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState, TDispatch } from "../../store/store";
-import * as burgerBuilderActions from "../../store/actions/index";
+import * as actions from "../../store/actions/index";
 
 type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 type mapStateToPropsType = ReturnType<typeof mapStateToProsp>;
@@ -44,6 +44,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
   };
 
   const purchaseContinueHandler = () => {
+    props.onInitPurches()
     navigate({ pathname: "/checkout" });
   };
 
@@ -106,20 +107,18 @@ const mapStateToProsp = (state: RootState) => {
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
     onIngredientAdded: (ingredientName: IngredientNames) =>
-      dispatch(burgerBuilderActions.addIngredient(ingredientName)),
+      dispatch(actions.addIngredient(ingredientName)),
     onIngredientRemoved: (ingredientName: IngredientNames) =>
-      dispatch(burgerBuilderActions.removeIngredient(ingredientName)),
-    onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients()),
+      dispatch(actions.removeIngredient(ingredientName)),
+    onInitIngredients: () => dispatch(actions.initIngredients()),
+    onInitPurches: () => dispatch(actions.purchaseInit())
   };
 };
-
-// export default BurgerBuilder
 
 export default connect(
   mapStateToProsp,
   mapDispatchToProps
 )(
-  //   withErrorHandler<BurgerBuilderType2>(
   withErrorHandler<BurgerBuilderType2, BurgerBuilderPropsType>(
     BurgerBuilder,
     Axios
