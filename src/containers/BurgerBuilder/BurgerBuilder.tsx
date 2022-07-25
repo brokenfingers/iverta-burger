@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
@@ -8,11 +8,11 @@ import { connect } from "react-redux";
 import Axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import { Ingredients, IBugerBuilderState, IngredientNames } from "../../Interfaces";
+import { Ingredients, IngredientNames } from "../../Interfaces";
 
 import { useNavigate } from "react-router-dom";
-import { AppDispatch, RootState } from "../../store/store";
-import * as burgerBuilderActions from '../../store/actions/index'
+import { AppDispatch, RootState, TDispatch } from "../../store/store";
+import * as burgerBuilderActions from "../../store/actions/index";
 
 export type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 export type mapStateToPropsType = ReturnType<typeof mapStateToProsp>;
@@ -24,7 +24,6 @@ export type BurgerBuilderPropsType = mapDispatchToPropsType &
 export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
   const initState = {
     purchasing: false,
-
   };
 
   const navigate = useNavigate();
@@ -32,8 +31,6 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
   const purchaseHandler = () => {
     setState((prev) => ({ ...prev, purchasing: true }));
   };
-
-
 
   const updatePurchaseState = (ingredients: Ingredients) => {
     const sum = Object.keys(ingredients)
@@ -66,7 +63,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
         <Burger ingredients={props.ings} />
         <BuildControls
           ingredientAdded={props.onIngredientAdded}
-          ingredientRemove={props.onIngredientRemoved}
+          ingredientRemove={props.onIngredientAdded}
           disabled={disabledInfo}
           price={props.price}
           purchasable={updatePurchaseState(props.ings)}
@@ -83,9 +80,11 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
         price={props.price}
       />
     );
-
   }
-  console.log(props);
+  useEffect(() => {
+    props.onInitIngredients();
+  }, []);
+
   return (
     <Aux>
       <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
@@ -100,15 +99,17 @@ const mapStateToProsp = (state: RootState) => {
   return {
     ings: state.ingredients,
     price: state.totalPrice,
+    error: state.error,
   };
 };
 
-const mapDispatchToProps = (dispatch: AppDispatch) => {
+const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
     onIngredientAdded: (ingredientName: IngredientNames) =>
       dispatch(burgerBuilderActions.addIngredient(ingredientName)),
     onIngredientRemoved: (ingredientName: IngredientNames) =>
       dispatch(burgerBuilderActions.removeIngredient(ingredientName)),
+    onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients()),
   };
 };
 

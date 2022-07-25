@@ -1,9 +1,7 @@
-import * as actionTypes from './store/actions/actionTypes'
-export type IngredientNames = 'salad' | 'meat' | 'cheese' | 'bacon'
+import * as actionTypes from "./store/actions/actionTypes";
+export type IngredientNames = "salad" | "meat" | "cheese" | "bacon";
 
-export type Ingredients = { [K in IngredientNames]: number }
-
-
+export type Ingredients = { [K in IngredientNames]: number };
 
 export interface IBugerBuilderState {
   ingredients: Ingredients;
@@ -31,9 +29,11 @@ export interface IOrder {
   id?: string; //used in Order.tsx
 }
 
-export type InputTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+export type InputTypes =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | HTMLSelectElement;
 
-export interface IBurgerBuilderActionType {
-  type: keyof typeof actionTypes
-  ingredientName: IngredientNames;
-}
+export type IBurgerBuilderActionType = {
+  type: keyof typeof actionTypes;
+};
