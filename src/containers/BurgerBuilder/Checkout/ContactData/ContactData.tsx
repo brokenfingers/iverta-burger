@@ -4,16 +4,19 @@ import {
   ICheckoutState,
   Ingredients,
   InputTypes,
+  IOrder,
   IStringObject,
 } from "../../../../Interfaces";
 import classes from "./ContactData.module.css";
 import { useState } from "react";
-import { axiosOrders } from "../../../../axios-orders";
+import axios, { axiosOrders } from "../../../../axios-orders";
+import withErrorHandler from "../../../../hoc/withErrorHandler/withErrorHandler";
 import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
 import { connect } from "react-redux";
-import { RootState } from "../../../../store/store";
-
+import { RootState, TDispatch } from "../../../../store/store";
+import { purchaseBurgerStart } from "../../../../store/actions/order";
+import * as actions from "../../../../store/actions";
 
 interface IValidRules {
   required: boolean;
@@ -53,7 +56,7 @@ interface IContactData {
   formIsValid: boolean;
 }
 
-const ContactData = (props: { ing: Ingredients; price: number }) => {
+const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
   const initContactData: IContactData = {
     orderForm: {
       name: {
@@ -233,8 +236,6 @@ const ContactData = (props: { ing: Ingredients; price: number }) => {
       setOrderData((prev) => ({ ...prev, formIsValid: true }));
     }
 
-    setOrderData((prev) => ({ ...prev, loading: true }));
-
     const simplifyStateForm = (orderform: IOrderForm): IStringObject => {
       let simplifiedForm = {} as IStringObject;
       for (let formKey in orderform) {
@@ -252,16 +253,19 @@ const ContactData = (props: { ing: Ingredients; price: number }) => {
       deliveryMethod: "fastest",
     };
 
-    axiosOrders
-      .addOrder(order)
-      .then((response) => {
-        setOrderData((prev) => ({ ...prev, loading: false }));
-        navigate("/");
-      })
-      .catch((err) => {
-        setOrderData((prev) => ({ ...prev, loading: false }));
-        navigate("/");
-      });
+    props.onOrderBurger(order);
+
+    console.log(props);
+    // axiosOrders
+    //   .addOrder(order)
+    //   .then((response) => {
+    //     setOrderData((prev) => ({ ...prev, loading: false }));
+    //     navigate("/");
+    //   })
+    //   .catch((err) => {
+    //     setOrderData((prev) => ({ ...prev, loading: false }));
+    //     navigate("/");
+    //   });
   };
   let form = (
     <form onSubmit={orderHandler}>
@@ -299,6 +303,8 @@ const ContactData = (props: { ing: Ingredients; price: number }) => {
   );
 };
 
+type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
+
 const mapStateToProps = (state: RootState) => {
   return {
     ing: state.ingredients,
@@ -306,5 +312,14 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default connect(mapStateToProps)(ContactData);
+type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    onOrderBurger: (orderData: IOrder) => {
+      dispatch(actions.purchaseBurgerStart(orderData));
+    },
+  };
+};
+
+export default connect(mapStateToProps)(withErrorHandler(ContactData, axios));

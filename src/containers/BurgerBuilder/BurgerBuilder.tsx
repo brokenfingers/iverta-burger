@@ -14,8 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState, TDispatch } from "../../store/store";
 import * as burgerBuilderActions from "../../store/actions/index";
 
-export type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
-export type mapStateToPropsType = ReturnType<typeof mapStateToProsp>;
+type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
+type mapStateToPropsType = ReturnType<typeof mapStateToProsp>;
 export type BurgerBuilderType = ReturnType<typeof BurgerBuilder>;
 export type BurgerBuilderType2 = typeof BurgerBuilder;
 export type BurgerBuilderPropsType = mapDispatchToPropsType &
