@@ -64,7 +64,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
         <Burger ingredients={props.ings} />
         <BuildControls
           ingredientAdded={props.onIngredientAdded}
-          ingredientRemove={props.onIngredientAdded}
+          ingredientRemove={props.onIngredientRemoved}
           disabled={disabledInfo}
           price={props.price}
           purchasable={updatePurchaseState(props.ings)}

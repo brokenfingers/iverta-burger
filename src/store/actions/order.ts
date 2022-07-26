@@ -4,7 +4,6 @@ import { TDispatch } from "../store";
 import { IOrder } from "../../Interfaces";
 
 export const purchaseBurgerSuccess = (id: string, orderData: IOrder) => {
-
   return {
     type: actionTypes.PURCHASE_BURGER_SUCCESS,
     orderId: id,
@@ -40,6 +39,43 @@ export const purchaseBurger = (orderData: IOrder) => {
 
 export const purchaseInit = () => {
   return {
-    type: actionTypes.PURCHASE_INIT
-  }
-}
+    type: actionTypes.PURCHASE_INIT,
+  };
+};
+
+export const fetchOrderSuccess = (orders: IOrder[]) => {
+  return {
+    type: actionTypes.FETCH_ORDERS_SUCCESS,
+    orders,
+  };
+};
+
+export const fetchOrdersFail = (error: { message: string }) => {
+  return {
+    type: actionTypes.FETCH_ORDERS_FAIL,
+    error,
+  };
+};
+
+export const fetchOrdersStart = () => {
+  return {
+    type: actionTypes.FETCH_ORDERS_START,
+  };
+};
+
+export const fetchOrders = () => {
+  return (dispatch: TDispatch) => {
+    dispatch(fetchOrdersStart());
+    axiosOrders
+      .getOrders()
+      .then((response) => {
+        const fetchedOrders = [] as IOrder[];
+        for (let key in response) {
+          fetchedOrders.push({ ...response[key], id: key });
+        }
+        dispatch(fetchOrderSuccess(fetchedOrders));
+        return { ...response, loading: false };
+      })
+      .catch((err) => dispatch(fetchOrdersFail(err)));
+  };
+};

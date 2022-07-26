@@ -27,6 +27,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(thunk))
 );
 
+export type TRootReducer = ReturnType<typeof rootReducer>;
 export type TAppState = ReturnType<typeof burgerBuilderReducer>;
 export type TDispatch = ThunkDispatch<TAppState, void, AnyAction>;
 export type TStore = Store<TAppState, AnyAction> & { dispatch: TDispatch };

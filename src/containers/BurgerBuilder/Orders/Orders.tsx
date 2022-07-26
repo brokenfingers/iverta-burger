@@ -1,45 +1,54 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import Order from "../../../components/Order/Order";
-import axios, { axiosOrders } from "../../../axios-orders";
+import axios from "../../../axios-orders";
 import { IOrder } from "../../../Interfaces";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
+import { TDispatch, TRootReducer } from "../../../store/store";
+import * as actions from "../../../store/actions";
+import { connect } from "react-redux";
+import Spinner from "../../../components/UI/Spinner/Spinner";
 
-const Orders = () => {
+type Props = mapDispatchToPropsType & mapStateToPropsType;
+
+const Orders = (props: Props) => {
   const initState = {
     orders: [] as IOrder[],
     loading: true,
   };
-  const [state, setState] = useState(initState);
-
-  const fetchOrders = useCallback(() => {
-    axiosOrders
-      .getOrders()
-      .then((response) => {
-        const fetchedOrders = [] as IOrder[];
-        for (let key in response) {
-          fetchedOrders.push({ ...response[key], id: key });
-        }
-        setState((prev) => ({ ...prev, orders: fetchedOrders }));
-        return { ...response, loading: false };
-      })
-      .catch((err) => ({ ...state, loading: false }));
-  }, []);
 
   useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
+    props.onFetchOrders();
+  }, []);
+  let orders: JSX.Element[] = [<Spinner key={new Date().getTime()} />];
+  if (!props.loading) {
+    orders = props.orders.map((order) => (
+      <Order
+        key={order.id}
+        ingredients={order.ingredients}
+        price={+order.price}
+      />
+    ));
+  }
 
-  return (
-    <div>
-      {state.orders.map((order) => (
-        <Order
-          key={order.id}
-          ingredients={order.ingredients}
-          price={+order.price}
-        />
-      ))}
-    </div>
-  );
+  return <div>{orders}</div>;
 };
 
-export default withErrorHandler(Orders, axios);
+type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
+const mapDispatchToProps = (dispatch: TDispatch) => {
+  return {
+    onFetchOrders: () => dispatch(actions.fetchOrders()),
+  };
+};
+
+type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
+const mapStateToProps = (state: TRootReducer) => {
+  return {
+    orders: state.order.orders,
+    loading: state.order.loading,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(Orders, axios));

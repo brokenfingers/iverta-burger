@@ -1,4 +1,9 @@
-export { purchaseBurgerStart, purchaseBurger, purchaseInit } from "./order";
+export {
+  purchaseBurgerStart,
+  purchaseBurger,
+  purchaseInit,
+  fetchOrders,
+} from "./order";
 export {
   addIngredient,
   removeIngredient,

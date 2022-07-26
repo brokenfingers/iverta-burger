@@ -1,6 +1,6 @@
 import { IngredientNames, Ingredients } from "../../Interfaces";
 import * as actionTypes from "../actions/actionTypes";
-// import { burgerBuilderActionTypes } from "../actions/burgerBuilder";
+import { updateObject } from "../utility";
 
 const initialState = {
   ingredients: {} as Ingredients,
@@ -39,48 +39,72 @@ type actionTypeSelection =
   | actionSetIngredients
   | actionFetchIngredients;
 
+const addIngredient = (
+  state: typeof initialState,
+  action: actionAddIngredients
+) => {
+  const updateAddIngredient = {
+    [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
+  };
+  const updateAddedIngredients = updateObject(
+    state.ingredients,
+    updateAddIngredient
+  );
+  const updateAddIngredientState = {
+    ingredients: updateAddedIngredients,
+    totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+  };
+  return updateObject(state, updateAddIngredientState);
+};
+const removeIngredient = (
+  state: typeof initialState,
+  action: actionRemoveIngredients
+) => {
+  const updateRemoceIngredient = {
+    [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
+  };
+  const updateRemoveIngredients = updateObject(
+    state.ingredients,
+    updateRemoceIngredient
+  );
+  const updateRemoveIngredientsState = {
+    ingredients: updateRemoveIngredients,
+    totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+  };
+  return updateObject(state, updateRemoveIngredientsState);
+};
+
+const setIngredient = (
+  state: typeof initialState,
+  action: actionSetIngredients
+) => {
+  return updateObject(state, {
+    ingredients: {
+      salad: action.ingredients.salad,
+      bacon: action.ingredients.bacon,
+      cheese: action.ingredients.cheese,
+      meat: action.ingredients.meat,
+    },
+    totalPrice: 4,
+    error: false,
+  });
+};
+
+const fetchIngredientsFail = (state: typeof initialState) => {
+  return updateObject(state, { error: true });
+};
+
 const reducer = (state = initialState, action: actionTypeSelection) => {
   let newState = { ...state };
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
-      return {
-        ...state,
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
-        },
-        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
-      };
+      return addIngredient(state, action);
     case actionTypes.REMOVE_INGREDIENT:
-      return {
-        ...state,
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientName]: state.ingredients[action.ingredientName]
-            ? state.ingredients[action.ingredientName] - 1
-            : 0,
-        },
-        totalPrice:
-          state.ingredients[action.ingredientName] &&
-          state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
-      };
+      return removeIngredient(state, action);
     case actionTypes.SET_INGREDIENTS:
-      return {
-        ...state,
-        ingredients: {
-          salad: action.ingredients.salad,
-          bacon: action.ingredients.bacon,
-          cheese: action.ingredients.cheese,
-          meat: action.ingredients.meat,
-        },
-        totalPrice: 4,
-        error: false,
-      };
+      return setIngredient(state, action);
     case actionTypes.FETCH_INGREDIENTS_FAILED:
-      return {
-        ...state,
-        error: true,
-      };
+      return fetchIngredientsFail(state);
     default:
       return newState;
   }

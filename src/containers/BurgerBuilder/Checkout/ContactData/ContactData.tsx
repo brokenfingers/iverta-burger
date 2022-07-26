@@ -243,18 +243,6 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
     };
 
     props.onOrderBurger(order);
-
-    console.log(props);
-    // axiosOrders
-    //   .addOrder(order)
-    //   .then((response) => {
-    //     setOrderData((prev) => ({ ...prev, loading: false }));
-    //     navigate("/");
-    //   })
-    //   .catch((err) => {
-    //     setOrderData((prev) => ({ ...prev, loading: false }));
-    //     navigate("/");
-    //   });
   };
   let form = (
     <form onSubmit={orderHandler}>
