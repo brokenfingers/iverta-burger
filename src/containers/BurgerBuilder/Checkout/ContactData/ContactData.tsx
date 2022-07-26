@@ -1,21 +1,14 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
 import Button from "../../../../components/UI/Button/Button";
-import {
-  ICheckoutState,
-  Ingredients,
-  InputTypes,
-  IOrder,
-  IStringObject,
-} from "../../../../Interfaces";
+import { InputTypes, IOrder, IStringObject } from "../../../../Interfaces";
 import classes from "./ContactData.module.css";
 import { useState } from "react";
-import axios, { axiosOrders } from "../../../../axios-orders";
+import axios from "../../../../axios-orders";
 import withErrorHandler from "../../../../hoc/withErrorHandler/withErrorHandler";
 import Spinner from "../../../../components/UI/Spinner/Spinner";
 import Input from "../../../../components/UI/Input/Input";
 import { connect } from "react-redux";
-import { RootState, TDispatch } from "../../../../store/store";
-import { purchaseBurgerStart } from "../../../../store/actions/order";
+import { RootState } from "../../../../store/store";
+
 import * as actions from "../../../../store/actions";
 
 interface IValidRules {
@@ -156,8 +149,6 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
     formIsValid: true,
   };
 
-  const navigate = useNavigate();
-  const checkoutState = useOutletContext<ICheckoutState>();
   let formData = {} as IStringObject;
   const [orderData, setOrderData] = useState(initContactData);
 
@@ -304,7 +295,9 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
 
 type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
 
-const mapStateToProps = (state: RootState & { loading: boolean, orders: IOrder[] }) => {
+const mapStateToProps = (
+  state: RootState & { loading: boolean; orders: IOrder[] }
+) => {
   return {
     ing: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,

@@ -5,7 +5,7 @@ const initialState = {
   orders: [] as IOrder[],
   // orders: [] as { [key: string]: {} },
   loading: false,
-  purchased: false
+  purchased: false,
 };
 
 type actionTypes = {
@@ -14,15 +14,22 @@ type actionTypes = {
   orderId: string;
 };
 
-type orderReducerReturnType = { loading: boolean, orders: IOrder[], purchased: boolean }
+type orderReducerReturnType = {
+  loading: boolean;
+  orders: IOrder[];
+  purchased: boolean;
+};
 
-const orderReducer = (state: typeof initialState = initialState, action: actionTypes): orderReducerReturnType => {
+const orderReducer = (
+  state: typeof initialState = initialState,
+  action: actionTypes
+): orderReducerReturnType => {
   switch (action.type) {
     case actionTypes.PURCHASE_INIT:
       return {
         ...state,
-        purchased: false
-      }
+        purchased: false,
+      };
     case actionTypes.PURCHASE_BURGER_START:
       return {
         ...state,
@@ -32,7 +39,12 @@ const orderReducer = (state: typeof initialState = initialState, action: actionT
       const newOrder = { ...action.orderData, id: action.orderId };
       // return { ...state, loading: false }
 
-      return { ...state, loading: false, purchased: true, orders: state.orders.length ? [...state.orders, newOrder] : [newOrder] }
+      return {
+        ...state,
+        loading: false,
+        purchased: true,
+        orders: state.orders.length ? [...state.orders, newOrder] : [newOrder],
+      };
 
     case actionTypes.PURCHASE_BURGER_FAIL:
       return {
@@ -42,7 +54,6 @@ const orderReducer = (state: typeof initialState = initialState, action: actionT
     default:
       return state;
   }
-  return state
 };
 
 export default orderReducer;

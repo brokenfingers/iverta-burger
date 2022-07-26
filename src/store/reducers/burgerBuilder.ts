@@ -1,8 +1,4 @@
-
-import {
-  IngredientNames,
-  Ingredients,
-} from "../../Interfaces";
+import { IngredientNames, Ingredients } from "../../Interfaces";
 import * as actionTypes from "../actions/actionTypes";
 // import { burgerBuilderActionTypes } from "../actions/burgerBuilder";
 
@@ -77,6 +73,7 @@ const reducer = (state = initialState, action: actionTypeSelection) => {
           cheese: action.ingredients.cheese,
           meat: action.ingredients.meat,
         },
+        totalPrice: 4,
         error: false,
       };
     case actionTypes.FETCH_INGREDIENTS_FAILED:

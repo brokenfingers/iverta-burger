@@ -1,20 +1,15 @@
 import { connect } from "react-redux";
-import { RootState, TDispatch } from "../../../store/store";
+import { RootState } from "../../../store/store";
 import { useNavigate, Outlet, Navigate } from "react-router-dom";
 import CheckoutSummary from "../../../components/Order/CheckoutSummary/CheckoutSummary";
-import Spinner from "../../../components/UI/Spinner/Spinner";
-import { Ingredients } from "../../../Interfaces";
-import * as actions from '../../../store/actions'
-import { useEffect } from "react";
 
-type Props = mapStateToPropsType
+type Props = mapStateToPropsType;
 
 const Checkout = (props: Props) => {
   const navigate = useNavigate();
 
-
   let checkoutJSX = <Navigate to="/" />;
-  const purchasedRedirect = props.purchased ? <Navigate to='/' /> : null
+  const purchasedRedirect = props.purchased ? <Navigate to="/" /> : null;
   if (Object.keys(props.ings).length) {
     checkoutJSX = (
       <CheckoutSummary
@@ -38,17 +33,13 @@ const Checkout = (props: Props) => {
   );
 };
 
-
-type mapStateToPropsType = ReturnType<typeof mapStateToProps>
+type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
 
 const mapStateToProps = (state: RootState) => {
   return {
     ings: state.burgerBuilder.ingredients,
-    purchased: state.order.purchased
+    purchased: state.order.purchased,
   };
 };
-
-
-
 
 export default connect(mapStateToProps)(Checkout);

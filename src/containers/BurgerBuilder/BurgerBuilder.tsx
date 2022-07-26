@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
@@ -11,7 +11,7 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import { Ingredients, IngredientNames } from "../../Interfaces";
 
 import { useNavigate } from "react-router-dom";
-import { AppDispatch, RootState, TDispatch } from "../../store/store";
+import { RootState, TDispatch } from "../../store/store";
 import * as actions from "../../store/actions/index";
 
 type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
@@ -44,7 +44,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
   };
 
   const purchaseContinueHandler = () => {
-    props.onInitPurches()
+    props.onInitPurches();
     navigate({ pathname: "/checkout" });
   };
 
@@ -111,7 +111,7 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
     onIngredientRemoved: (ingredientName: IngredientNames) =>
       dispatch(actions.removeIngredient(ingredientName)),
     onInitIngredients: () => dispatch(actions.initIngredients()),
-    onInitPurches: () => dispatch(actions.purchaseInit())
+    onInitPurches: () => dispatch(actions.purchaseInit()),
   };
 };
 
