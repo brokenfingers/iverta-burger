@@ -9,3 +9,5 @@ export {
   removeIngredient,
   initIngredients,
 } from "./burgerBuilder";
+
+export { auth } from "./auth";

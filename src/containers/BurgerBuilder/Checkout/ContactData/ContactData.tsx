@@ -15,6 +15,7 @@ interface IValidRules {
   required: boolean;
   minLength?: number;
   maxLength?: number;
+  isEmail?: boolean;
 }
 
 type IValidation = {
@@ -124,6 +125,8 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
         validation: {
           rules: {
             required: true,
+            // email validation disabled while in dev mode
+            isEmail: false,
           },
           valid: false,
         },
@@ -166,6 +169,10 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
     if (rules.required) isValid = value.trim() !== "";
     if (rules.minLength) {
       isValid = value.trim().length >= rules.minLength && isValid;
+    }
+    if (rules.isEmail) {
+      isValid =
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) && isValid;
     }
     if (rules.maxLength) {
       isValid = value.trim().length <= rules.maxLength && isValid;

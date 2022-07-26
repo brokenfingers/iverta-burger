@@ -6,6 +6,7 @@ import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 import Checkout from "./containers/BurgerBuilder/Checkout/Checkout";
 import ContactData from "./containers/BurgerBuilder/Checkout/ContactData/ContactData";
 import Orders from "./containers/BurgerBuilder/Orders/Orders";
+import Auth from "./containers/Auth/Auth";
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
               <Route path="contact-data" element={<ContactData />} />
             </Route>
             <Route path="/orders" element={<Orders />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<BurgerBuilder />} />
           </Routes>
         </Layout>

@@ -37,3 +37,5 @@ export type InputTypes =
 export type IBurgerBuilderActionType = {
   type: keyof typeof actionTypes;
 };
+
+export type TError = { message: string };

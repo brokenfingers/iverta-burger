@@ -30,17 +30,25 @@ const NavigationItems = () => {
   const setAllLinksfalse = () => {
     setActiveLinks((old) => ({
       ...old,
-      active: { ["/"]: false, ["/orders"]: false },
+      active: { ["/"]: false, ["/orders"]: false, ["/auth"]: false },
     }));
   };
 
   if (activeLinks.currentLocation !== currentUrl.pathname) {
     setActiveLinks((old) => ({ ...old, currentLocation: currentUrl.pathname }));
     setAllLinksfalse();
-    if (currentUrl.pathname === "/") {
-      setCurrentLinkTrue("/");
-    } else {
-      setCurrentLinkTrue("/orders");
+    switch (currentUrl.pathname) {
+      case "/":
+        setCurrentLinkTrue("/");
+        break;
+      case "/orders":
+        setCurrentLinkTrue("/orders");
+        break;
+      case "/auth":
+        setCurrentLinkTrue("/auth");
+        break;
+      default:
+        setCurrentLinkTrue("/");
     }
   }
 
@@ -51,6 +59,9 @@ const NavigationItems = () => {
       </NavigationItem>
       <NavigationItem active={activeLinks.active["/orders"]} link="/orders">
         Orders
+      </NavigationItem>
+      <NavigationItem active={activeLinks.active["/auth"]} link="/auth">
+        Authenticate
       </NavigationItem>
     </ul>
   );
