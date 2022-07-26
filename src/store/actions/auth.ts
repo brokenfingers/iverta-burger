@@ -8,10 +8,10 @@ export const authStart = () => {
     type: actionTypes.AUTH_START,
   };
 };
-export const authSuccess = (authData: "AUTH.TS UNKNOWN") => {
+export const authSuccess = (token: string, userId: string) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
-    authData,
+    idToken: token, userId
   };
 };
 export const authFail = (error: TError) => {
@@ -34,8 +34,8 @@ export const auth = (email: string, password: string, isSignup: boolean) => {
     axios
       .post(url, authData)
       .then((response) => {
-        console.log(response);
-        dispatch(authSuccess(response.data));
+        console.log(response.data);
+        dispatch(authSuccess(response.data.idToken, response.data.localId));
       })
       .catch((err) => {
         console.log(err);

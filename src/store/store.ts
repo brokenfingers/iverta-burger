@@ -9,6 +9,9 @@ import {
 import thunk, { ThunkDispatch } from "redux-thunk";
 import orderReducer from "./reducers/order";
 import burgerBuilderReducer from "./reducers/burgerBuilder";
+import authReducer from "./reducers/auth";
+
+
 
 declare global {
   interface Window {
@@ -16,9 +19,12 @@ declare global {
   }
 }
 
+
+
 const rootReducer = combineReducers({
   order: orderReducer,
   burgerBuilder: burgerBuilderReducer,
+  auth: authReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
