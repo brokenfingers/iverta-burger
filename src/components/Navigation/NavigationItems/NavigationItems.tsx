@@ -61,9 +61,11 @@ const NavigationItems = (props: Props) => {
       <NavigationItem active={activeLinks.active["/"]} link="/">
         Burger Builder
       </NavigationItem>
-      <NavigationItem active={activeLinks.active["/orders"]} link="/orders">
-        Orders
-      </NavigationItem>
+      {props.isAuth && (
+        <NavigationItem active={activeLinks.active["/orders"]} link="/orders">
+          Orders
+        </NavigationItem>
+      )}
       {props.isAuth ? (
         <NavigationItem active={activeLinks.active["/logout"]} link="/logout">
           Logout

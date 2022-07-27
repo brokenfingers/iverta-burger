@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Button from "../../components/UI/Button/Button";
 import Input from "../../components/UI/Input/Input";
 import { InputTypes } from "../../Interfaces";
@@ -7,6 +7,7 @@ import * as actions from "../../store/actions";
 import { TDispatch, TRootReducer } from "../../store/store";
 import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import { Navigate } from "react-router-dom";
 
 type autProps = mapDispatchToPropsType & mapStateToPropsType;
 
@@ -139,8 +140,19 @@ const Auth: FunctionComponent<autProps> = (props) => {
   const switchAuthHandler = () => {
     setAuthState((prev) => ({ ...prev, isSignUp: !prev.isSignUp }));
   };
+
+  let authRedirect = null;
+  if (props.isAuth) authRedirect = <Navigate to={props.authRedirectPath} />;
+
+  useEffect(() => {
+    if (!props.buildingBurger && props.authRedirectPath !== "/") {
+      props.onSetAuthRedirect();
+    }
+  }, []);
+
   return (
     <div className={classes.Auth}>
+      {authRedirect}
       {errorMessage}
       <form onSubmit={submitHandler}>
         {form}
@@ -159,6 +171,7 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
     onAuth: (email: string, passord: string, isSignUp: boolean) =>
       dispatch(actions.auth(email, passord, isSignUp)),
+    onSetAuthRedirect: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };
 
@@ -167,6 +180,9 @@ const mapStateToProps = (state: TRootReducer) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
+    isAuth: state.auth.token !== null,
+    buildingBurger: state.burgerBuilder.building,
+    authRedirectPath: state.auth.authRedirectPath,
   };
 };
 

@@ -10,4 +10,4 @@ export {
   initIngredients,
 } from "./burgerBuilder";
 
-export { auth, logout } from "./auth";
+export { auth, logout, setAuthRedirectPath } from "./auth";

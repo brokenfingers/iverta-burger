@@ -28,8 +28,14 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
 
   const navigate = useNavigate();
   const [state, setState] = useState(initState);
+
   const purchaseHandler = () => {
-    setState((prev) => ({ ...prev, purchasing: true }));
+    if (props.isAuth) {
+      setState((prev) => ({ ...prev, purchasing: true }));
+    } else {
+      props.onSetAuthRedirectPath("/checkout");
+      navigate({ pathname: "/auth" });
+    }
   };
 
   const updatePurchaseState = (ingredients: Ingredients) => {
@@ -69,6 +75,7 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
           price={props.price}
           purchasable={updatePurchaseState(props.ings)}
           ordered={purchaseHandler}
+          isAuth={props.isAuth}
         />
       </Aux>
     );
@@ -101,6 +108,7 @@ const mapStateToProsp = (state: RootState) => {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     error: state.burgerBuilder.error,
+    isAuth: state.auth.token !== null,
   };
 };
 
@@ -112,6 +120,8 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
       dispatch(actions.removeIngredient(ingredientName)),
     onInitIngredients: () => dispatch(actions.initIngredients()),
     onInitPurches: () => dispatch(actions.purchaseInit()),
+    onSetAuthRedirectPath: (path: string) =>
+      dispatch(actions.setAuthRedirectPath(path)),
   };
 };
 

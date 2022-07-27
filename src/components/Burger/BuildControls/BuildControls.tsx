@@ -9,6 +9,7 @@ interface Props {
   price: number;
   purchasable: boolean;
   ordered: () => void;
+  isAuth: boolean;
 }
 
 const controls: { label: string; type: IngredientNames }[] = [
@@ -37,7 +38,7 @@ const BuildControls = (props: Props) => (
       disabled={!props.purchasable}
       onClick={props.ordered}
     >
-      ORDER NOW
+      {props.isAuth ? "ORDER NOW" : "SIGN UP TO ORDER"}
     </button>
   </div>
 );
