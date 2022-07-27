@@ -247,6 +247,7 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
       price: props.price,
       orderData: formData,
       deliveryMethod: "fastest",
+      userId: props.userId,
     };
 
     props.onOrderBurger(order, props.token);
@@ -298,6 +299,7 @@ const mapStateToProps = (
     price: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
     token: state.auth.token,
+    userId: state.auth.userId,
   };
 };
 

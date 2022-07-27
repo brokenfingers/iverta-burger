@@ -1,14 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { Ingredients, IOrder } from "./Interfaces";
-// import axios, { AxiosRequestConfig } from 'axios'
 
 export interface iResponse {
   data: IOrder;
 }
-
-// interface AxiosInstance {
-//     request<T = IOrder, R = AxiosResponse<T>>(config: AxiosRequestConfig): Promise<R>;
-// }
 
 const instance = axios.create({
   baseURL:
@@ -21,7 +16,6 @@ const orderRequests = {
   get: (url: string) => instance.get<Ingredients>(url).then(responseBody),
   post: (url: string, body: IOrder) =>
     instance.post<IOrder>(url, body).then(responseBody),
-  // delete: (url: string) => instance.delete<Book>(url).then(responseBody),
 };
 
 type addOrderReturn = { name: string };
@@ -29,25 +23,18 @@ type addOrderReturn = { name: string };
 export const axiosOrders = {
   getIngredients: (): Promise<Ingredients> =>
     orderRequests.get("/ingredients.json"),
-  getOrders: (token: string | null = ""): Promise<IOrder[]> =>
-    orderRequests.get("/orders.json?auth=" + token),
-  // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
+  getOrders: (token: string | null = "", userId: string): Promise<IOrder[]> => {
+    const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+    return orderRequests.get("/orders.json" + queryParams);
+  },
+
   addOrder: (
     order: IOrder,
     token: string | null = null
-  ): Promise<addOrderReturn> =>
-    orderRequests.post("/orders.json?auth=" + token, order),
-  // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
+  ): Promise<addOrderReturn> => {
+    const queryParams = `?auth=${token}`;
+    return orderRequests.post("/orders.json" + queryParams, order);
+  },
 };
-
-// import Books from './api' // config added in api.ts file
-// const [books, setBooks] = React.useState<Book[]>([]);
-// Books.getPosts()
-//     .then((data) => {
-//         setBooks(data);
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
 
 export default instance;

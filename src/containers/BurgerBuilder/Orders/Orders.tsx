@@ -17,7 +17,7 @@ const Orders = (props: Props) => {
   };
 
   useEffect(() => {
-    props.onFetchOrders(props.token);
+    props.onFetchOrders(props.token, props.userId);
   }, []);
   let orders: JSX.Element[] = [<Spinner key={new Date().getTime()} />];
   if (!props.loading) {
@@ -36,8 +36,8 @@ const Orders = (props: Props) => {
 type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
-    onFetchOrders: (token: null | string) =>
-      dispatch(actions.fetchOrders(token)),
+    onFetchOrders: (token: null | string, userId: string) =>
+      dispatch(actions.fetchOrders(token, userId)),
   };
 };
 
@@ -47,6 +47,7 @@ const mapStateToProps = (state: TRootReducer) => {
     orders: state.order.orders,
     loading: state.order.loading,
     token: state.auth.token,
+    userId: state.auth.userId,
   };
 };
 

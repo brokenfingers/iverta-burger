@@ -66,11 +66,11 @@ export const fetchOrdersStart = () => {
   };
 };
 
-export const fetchOrders = (token: string | null = "") => {
+export const fetchOrders = (token: string | null = "", userId: string) => {
   return (dispatch: TDispatch) => {
     dispatch(fetchOrdersStart());
     axiosOrders
-      .getOrders(token)
+      .getOrders(token, userId)
       .then((response) => {
         const fetchedOrders = [] as IOrder[];
         for (let key in response) {

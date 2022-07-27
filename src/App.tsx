@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Layout from "./hoc/Layout/Layout";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
@@ -9,11 +9,13 @@ import Orders from "./containers/BurgerBuilder/Orders/Orders";
 import Auth from "./containers/Auth/Auth";
 import Logout from "./containers/Auth/Logout/Logout";
 import { connect } from "react-redux";
-import { TDispatch } from "./store/store";
+import { RootState, TDispatch } from "./store/store";
 import * as actions from "./store/actions/index";
 
-class App extends Component<mapDispatchToPropsType> {
-  constructor(props: mapDispatchToPropsType) {
+type Props = mapDispatchToPropsType & mapStateToPropsType;
+
+class App extends Component<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
@@ -25,13 +27,19 @@ class App extends Component<mapDispatchToPropsType> {
       <div>
         <Layout>
           <Routes>
-            <Route path="checkout" element={<Checkout />}>
-              <Route path="contact-data" element={<ContactData />} />
-            </Route>
-            <Route path="/orders" element={<Orders />} />
+            {this.props.isAuthenticated && (
+              <>
+                <Route path="checkout" element={<Checkout />}>
+                  <Route path="contact-data" element={<ContactData />} />
+                </Route>
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/logout" element={<Logout />} />
+              </>
+            )}
             <Route path="/auth" element={<Auth />} />
-            <Route path="/logout" element={<Logout />} />
             <Route path="/" element={<BurgerBuilder />} />
+            <Route path="*" element={<BurgerBuilder />} /> // page-not-found
+            route
           </Routes>
         </Layout>
       </div>
@@ -47,4 +55,12 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(App);
+type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    isAuthenticated: state.auth.token !== null,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
