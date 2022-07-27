@@ -8,8 +8,18 @@ import ContactData from "./containers/BurgerBuilder/Checkout/ContactData/Contact
 import Orders from "./containers/BurgerBuilder/Orders/Orders";
 import Auth from "./containers/Auth/Auth";
 import Logout from "./containers/Auth/Logout/Logout";
+import { connect } from "react-redux";
+import { TDispatch } from "./store/store";
+import * as actions from "./store/actions/index";
 
-class App extends Component {
+class App extends Component<mapDispatchToPropsType> {
+  constructor(props: mapDispatchToPropsType) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.onTryAutoSignup();
+  }
   render() {
     return (
       <div>
@@ -29,4 +39,12 @@ class App extends Component {
   }
 }
 
-export default App;
+type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
+
+const mapDispatchToProps = (dispatch: TDispatch) => {
+  return {
+    onTryAutoSignup: () => dispatch(actions.authCheckState()),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(App);

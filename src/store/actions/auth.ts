@@ -23,6 +23,9 @@ export const authFail = (error: TError) => {
 };
 
 export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("expirationDate");
+  localStorage.removeItem("localId");
   return {
     type: actionTypes.AUTH_LOGOUT,
   };
@@ -31,7 +34,6 @@ export const logout = () => {
 export const checkAuthTimeout = (expirationTime: number) => {
   return (dispatch: TDispatch) => {
     setTimeout(() => {
-      console.log(expirationTime);
       dispatch(logout());
     }, expirationTime + 1000);
   };
@@ -50,11 +52,16 @@ export const auth = (email: string, password: string, isSignup: boolean) => {
     axios
       .post(url, authData)
       .then((response) => {
+        const expirationDate = new Date(
+          new Date().getTime() + response.data.expiresIn * 1000
+        );
+        localStorage.setItem("token", response.data.idToken);
+        localStorage.setItem("expirationDate", `${expirationDate}`);
+        localStorage.setItem("localId", response.data.localId);
         dispatch(authSuccess(response.data.idToken, response.data.localId));
         dispatch(checkAuthTimeout(response.data.expiresIn));
       })
       .catch((err) => {
-        console.log(err);
         dispatch(authFail(err.response.data.error));
       });
   };
@@ -64,5 +71,27 @@ export const setAuthRedirectPath = (path: string) => {
   return {
     type: actionTypes.SET_AUTH_REDIRECT,
     path: path,
+  };
+};
+
+export const authCheckState = () => {
+  return (dispatch: TDispatch) => {
+    const token = localStorage.getItem("token");
+    const expirationDate = new Date(
+      localStorage.getItem("expirationDate") ?? 0
+    );
+    if (!token || !expirationDate) {
+      dispatch(logout());
+    } else {
+      if (expirationDate < new Date()) {
+        dispatch(logout());
+      } else {
+        const userId = localStorage.getItem("localId") as string;
+        dispatch(authSuccess(token, userId));
+        checkAuthTimeout(
+          (expirationDate.getTime() - new Date().getTime()) / 1000
+        );
+      }
+    }
   };
 };
