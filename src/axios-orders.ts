@@ -29,10 +29,14 @@ type addOrderReturn = { name: string };
 export const axiosOrders = {
   getIngredients: (): Promise<Ingredients> =>
     orderRequests.get("/ingredients.json"),
-  getOrders: (): Promise<IOrder[]> => orderRequests.get("/orders.json"),
+  getOrders: (token: string | null = ""): Promise<IOrder[]> =>
+    orderRequests.get("/orders.json?auth=" + token),
   // getSingleBook : (isbn: string): Promise<Book> => bookRequests.get(`/books/${isbn}`),
-  addOrder: (order: IOrder): Promise<addOrderReturn> =>
-    orderRequests.post("/orders.json", order),
+  addOrder: (
+    order: IOrder,
+    token: string | null = null
+  ): Promise<addOrderReturn> =>
+    orderRequests.post("/orders.json?auth=" + token, order),
   // deleteBook : (isbn: string): Promise<Book> => bookRequests.delete(`/books/${isbn}`)
 };
 

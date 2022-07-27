@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { FunctionComponent, useState } from "react";
 import Button from "../../components/UI/Button/Button";
 import Input from "../../components/UI/Input/Input";
 import { InputTypes } from "../../Interfaces";
 import classes from "./Auth.module.css";
 import * as actions from "../../store/actions";
-import { TDispatch } from "../../store/store";
+import { TDispatch, TRootReducer } from "../../store/store";
 import { connect } from "react-redux";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
-const Auth = (props: mapDispatchToPropsType) => {
+type autProps = mapDispatchToPropsType & mapStateToPropsType;
+
+const Auth: FunctionComponent<autProps> = (props) => {
   const initState = {
     controls: {
       email: {
@@ -56,7 +59,7 @@ const Auth = (props: mapDispatchToPropsType) => {
     });
   }
 
-  const form = formElementsArray.map((formElement) => (
+  let form = formElementsArray.map((formElement) => (
     <Input
       key={formElement.id}
       touched={formElement.config.touched}
@@ -67,6 +70,15 @@ const Auth = (props: mapDispatchToPropsType) => {
       changed={(e) => inputChangeHandler(e, formElement.id as controlNames)}
     />
   ));
+
+  if (props.loading) {
+    form = [<Spinner key={new Date().getTime()} />];
+  }
+
+  let errorMessage = null;
+  if (props.error) {
+    errorMessage = <p>{props.error.message}</p>;
+  }
 
   interface IValidRules {
     required: boolean;
@@ -129,6 +141,7 @@ const Auth = (props: mapDispatchToPropsType) => {
   };
   return (
     <div className={classes.Auth}>
+      {errorMessage}
       <form onSubmit={submitHandler}>
         {form}
         <Button btnType={"Success"}>SUBMIT</Button>
@@ -141,6 +154,7 @@ const Auth = (props: mapDispatchToPropsType) => {
 };
 
 type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
+
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
     onAuth: (email: string, passord: string, isSignUp: boolean) =>
@@ -148,4 +162,12 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
+const mapStateToProps = (state: TRootReducer) => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

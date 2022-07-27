@@ -8,7 +8,11 @@ interface IActiveLinks {
   active: { [key: string]: boolean };
 }
 
-const NavigationItems = () => {
+type Props = {
+  isAuth: boolean;
+};
+
+const NavigationItems = (props: Props) => {
   const currentUrl = useLocation();
 
   const initActiveLinks = {
@@ -60,9 +64,15 @@ const NavigationItems = () => {
       <NavigationItem active={activeLinks.active["/orders"]} link="/orders">
         Orders
       </NavigationItem>
-      <NavigationItem active={activeLinks.active["/auth"]} link="/auth">
-        Authenticate
-      </NavigationItem>
+      {props.isAuth ? (
+        <NavigationItem active={activeLinks.active["/logout"]} link="/logout">
+          Logout
+        </NavigationItem>
+      ) : (
+        <NavigationItem active={activeLinks.active["/auth"]} link="/auth">
+          Authenticate
+        </NavigationItem>
+      )}
     </ul>
   );
 };

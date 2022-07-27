@@ -249,7 +249,7 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
       deliveryMethod: "fastest",
     };
 
-    props.onOrderBurger(order);
+    props.onOrderBurger(order, props.token);
   };
   let form = (
     <form onSubmit={orderHandler}>
@@ -297,6 +297,7 @@ const mapStateToProps = (
     ing: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
+    token: state.auth.token,
   };
 };
 
@@ -304,8 +305,8 @@ type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    onOrderBurger: (orderData: IOrder) => {
-      dispatch(actions.purchaseBurger(orderData));
+    onOrderBurger: (orderData: IOrder, token: string | null = "") => {
+      dispatch(actions.purchaseBurger(orderData, token));
     },
   };
 };
