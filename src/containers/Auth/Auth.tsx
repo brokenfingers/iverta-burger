@@ -117,7 +117,9 @@ const Auth: FunctionComponent<autProps> = (props) => {
   let authRedirect = null;
   if (props.isAuth) authRedirect = <Navigate to={props.authRedirectPath} />;
 
+
   useEffect(() => {
+
     if (!props.buildingBurger && props.authRedirectPath !== "/") {
       props.onSetAuthRedirect();
     }

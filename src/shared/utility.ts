@@ -23,7 +23,7 @@ export const checkValidity = (value: string, rules: IValidRules): boolean => {
   }
   if (rules.isEmail) {
     isValid =
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) && isValid;
+      /[a-zA-Z0-9.]*@[a-z]*[.a-z]*/.test(value) && isValid;
   }
   if (rules.maxLength) {
     isValid = value.trim().length <= rules.maxLength && isValid;
