@@ -5,7 +5,7 @@ import CheckoutSummary from "../../../components/Order/CheckoutSummary/CheckoutS
 
 type Props = mapStateToPropsType;
 
-const Checkout = (props: Props) => {
+export const Checkout = (props: Props) => {
   const navigate = useNavigate();
 
   let checkoutJSX = <Navigate to="/" />;
