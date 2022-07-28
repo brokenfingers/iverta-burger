@@ -8,7 +8,7 @@ import { TDispatch, TRootReducer } from "../../store/store";
 import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import { Navigate } from "react-router-dom";
-import { updateObject } from "../../shared/utility";
+import { checkValidity, updateObject } from "../../shared/utility";
 
 type autProps = mapDispatchToPropsType & mapStateToPropsType;
 
@@ -82,29 +82,8 @@ const Auth: FunctionComponent<autProps> = (props) => {
     errorMessage = <p>{props.error.message}</p>;
   }
 
-  interface IValidRules {
-    required: boolean;
-    minLength?: number;
-    maxLength?: number;
-    isEmail?: boolean;
-  }
 
-  const checkValidity = (value: string, rules: IValidRules): boolean => {
-    let isValid = true;
-    if (!rules.required) return isValid;
-    if (rules.required) isValid = value.trim() !== "";
-    if (rules.minLength) {
-      isValid = value.trim().length >= rules.minLength && isValid;
-    }
-    if (rules.isEmail) {
-      isValid =
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.trim().length <= rules.maxLength && isValid;
-    }
-    return isValid;
-  };
+
 
   const inputChangeHandler = (
     e: React.ChangeEvent<InputTypes>,
