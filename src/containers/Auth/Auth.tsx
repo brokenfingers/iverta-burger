@@ -8,6 +8,7 @@ import { TDispatch, TRootReducer } from "../../store/store";
 import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import { Navigate } from "react-router-dom";
+import { updateObject } from "../../shared/utility";
 
 type autProps = mapDispatchToPropsType & mapStateToPropsType;
 
@@ -109,22 +110,15 @@ const Auth: FunctionComponent<autProps> = (props) => {
     e: React.ChangeEvent<InputTypes>,
     controlName: controlNames
   ) => {
-    let updatedControls = {
-      ...authState.controls,
-      [controlName]: {
-        ...authState.controls[controlName],
-        value: e.target.value,
-        validation: {
-          ...authState.controls[controlName].validation,
-          valid: checkValidity(
-            e.target.value,
-            authState.controls[controlName].validation.rules
-          ),
-        },
-
-        touched: true,
-      },
-    };
+    const updatedValidation = updateObject(authState.controls[controlName].validation, {
+      valid: checkValidity(e.target.value, authState.controls[controlName].validation.rules)
+    })
+    const updatedSelectedController = updateObject(authState.controls[controlName], {
+      value: e.target.value,
+      validation: updatedValidation,
+      touched: true
+    })
+    const updatedControls = updateObject(authState.controls, { [controlName]: updatedSelectedController })
     setAuthState((prev) => ({ ...prev, controls: { ...updatedControls } }));
   };
 

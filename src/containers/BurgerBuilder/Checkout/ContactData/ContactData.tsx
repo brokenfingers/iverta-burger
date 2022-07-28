@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../../../store/store";
 
 import * as actions from "../../../../store/actions";
+import { updateObject } from "../../../../shared/utility";
 
 interface IValidRules {
   required: boolean;
@@ -163,6 +164,7 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
       config: orderData.orderForm[key],
     });
   }
+
   const checkValidity = (value: string, rules: IValidRules): boolean => {
     let isValid = true;
     if (!rules.required) return isValid;
@@ -185,14 +187,12 @@ const ContactData = (props: mapStateToPropsType & mapDispatchToPropsType) => {
     identifier: string
   ) => {
     let orderForm = { ...orderData.orderForm };
-    const selectedElement = { ...orderForm[identifier] };
-    selectedElement.value = e.target.value;
-    selectedElement.touched = true;
-    selectedElement.validation = {
-      ...selectedElement.validation,
-      valid: checkValidity(e.target.value, selectedElement.validation.rules),
-    };
-    orderForm = { ...orderData.orderForm, [identifier]: selectedElement };
+    const selectedElement = updateObject(orderForm[identifier], {
+      value: e.target.value,
+      touched: true,
+      validation: updateObject(orderForm[identifier].validation, { valid: checkValidity(e.target.value, orderForm[identifier].validation.rules) })
+    })
+    orderForm = updateObject(orderData.orderForm, { [identifier]: selectedElement });
     setOrderData((pr) => ({ ...pr, orderForm: orderForm }));
     if (!formInputsAreValid(orderData.orderForm)) {
       setOrderData((pr) => ({ ...pr, formIsValid: true }));
