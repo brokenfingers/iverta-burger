@@ -1,25 +1,20 @@
 import Modal from "../../components/UI/Modal/Modal";
 import Aux from "../Auxx/Auxx";
-import { BurgerBuilder } from "../../containers/BurgerBuilder/BurgerBuilder";
 
 import { Component } from "react";
 import { AxiosInstance } from "axios";
 
-interface Props {
-  redir: () => void;
-}
-
-const withErrorHandler = (
-  WrappedComponent: typeof BurgerBuilder,
+const withErrorHandler = <T extends Function, P>(
+  WrappedComponent: T,
   axios: AxiosInstance
 ) => {
-  return class extends Component<Props> {
+  return class extends Component<P> {
     state: { error: null | { message: string } };
 
     resInterceptor: number | null = null;
     reqInterceptor: number | null = null;
 
-    constructor(props: Props) {
+    constructor(props: P) {
       super(props);
 
       this.state = {

@@ -1,20 +1,21 @@
-import Logo from '../../Logo/Logo'
-import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle'
-import NavigationItems from '../NavigationItems/NavigationItems'
-import classes from './Toolbar.module.css'
+import Logo from "../../Logo/Logo";
+import DrawerToggle from "../SideDrawer/DrawerToggle/DrawerToggle";
+import NavigationItems from "../NavigationItems/NavigationItems";
+import classes from "./Toolbar.module.css";
 
 interface Props {
-    openSidedrawer: ()=>void
+  openSidedrawer: () => void;
+  isAuth: boolean;
 }
 
-const Toolbar = (props:Props) => (
-    <header className={classes.Toolbar}>
-        <DrawerToggle open={props.openSidedrawer}/>
-        <Logo/>
-        <nav className={classes.DesktopOnly}>
-            <NavigationItems/>
-        </nav>
-    </header>
-)
+const Toolbar: React.FC<Props> = (props) => (
+  <header className={classes.Toolbar}>
+    <DrawerToggle open={props.openSidedrawer} />
+    <Logo />
+    <nav className={classes.DesktopOnly}>
+      <NavigationItems isAuth={props.isAuth} />
+    </nav>
+  </header>
+);
 
-export default Toolbar
+export default Toolbar;

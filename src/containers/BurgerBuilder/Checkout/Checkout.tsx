@@ -1,27 +1,45 @@
-import {Component} from 'react'
-import CheckoutSummary from '../../../components/Order/CheckoutSummary/CheckoutSummary'
+import { connect } from "react-redux";
+import { RootState } from "../../../store/store";
+import { useNavigate, Outlet, Navigate } from "react-router-dom";
+import CheckoutSummary from "../../../components/Order/CheckoutSummary/CheckoutSummary";
 
+type Props = mapStateToPropsType;
 
-class Checkout extends Component {
+export const Checkout = (props: Props) => {
+  const navigate = useNavigate();
 
-    state = {
-        ingredients: {
-            salad:1,
-            meat: 1,
-            cheese: 1,
-            bacon: 1
-        }
-    }
+  let checkoutJSX = <Navigate to="/" />;
+  const purchasedRedirect = props.purchased ? <Navigate to="/" /> : null;
+  if (Object.keys(props.ings).length) {
+    checkoutJSX = (
+      <CheckoutSummary
+        ingredients={props.ings}
+        checkoutCanceled={() => {
+          navigate(-1);
+        }}
+        checkoutContinued={() => {
+          navigate("contact-data");
+        }}
+      />
+    );
+  }
 
-    render( ) {
+  return (
+    <div>
+      {purchasedRedirect}
+      {checkoutJSX}
+      <Outlet context={props} />
+    </div>
+  );
+};
 
-        return(
-            <div>
-                <CheckoutSummary ingredients={this.state.ingredients}/>
-            </div>
-        )
-    }
+type mapStateToPropsType = ReturnType<typeof mapStateToProps>;
 
-}
+const mapStateToProps = (state: RootState) => {
+  return {
+    ings: state.burgerBuilder.ingredients,
+    purchased: state.order.purchased,
+  };
+};
 
-export default Checkout
+export default connect(mapStateToProps)(Checkout);

@@ -1,6 +1,7 @@
-export interface Ingredients {
-  [key: string]: number;
-}
+import * as actionTypes from "./store/actions/actionTypes";
+export type IngredientNames = "salad" | "meat" | "cheese" | "bacon";
+
+export type Ingredients = { [K in IngredientNames]: number };
 
 export interface IBugerBuilderState {
   ingredients: Ingredients;
@@ -10,3 +11,31 @@ export interface IBugerBuilderState {
   loading: boolean;
   error: boolean;
 }
+
+export interface ICheckoutState {
+  ingredients: Ingredients;
+  price: number;
+}
+
+export interface IStringObject {
+  [key: string]: string;
+}
+
+export interface IOrder {
+  ingredients: Ingredients;
+  price: number;
+  orderData: IStringObject;
+  deliveryMethod: string;
+  id?: string; //used in Order.tsx
+}
+
+export type InputTypes =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | HTMLSelectElement;
+
+export type IBurgerBuilderActionType = {
+  type: keyof typeof actionTypes;
+};
+
+export type TError = { message: string };
