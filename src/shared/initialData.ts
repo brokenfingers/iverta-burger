@@ -1,6 +1,46 @@
 import { IStringObject } from "../Interfaces";
 
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv Auth vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
+export const initAuthState = {
+    controls: {
+        email: {
+            elementType: "input",
+            elementConfig: {
+                type: "email",
+                placeholder: "Mail Address",
+            },
+            value: "",
+            touched: false,
+            validation: {
+                rules: {
+                    required: true,
+                    isEmail: true,
+                },
+                valid: false,
+            },
+        },
+        password: {
+            elementType: "input",
+            elementConfig: {
+                type: "password",
+                placeholder: "Password",
+            },
+            value: "",
+            touched: false,
+            validation: {
+                rules: {
+                    required: true,
+                    minLength: 6,
+                },
+                valid: false,
+            },
+        },
+    },
+    isSignUp: true,
+};
+
+//MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM Auth MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
 //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ContactData vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
