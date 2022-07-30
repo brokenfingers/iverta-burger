@@ -16,19 +16,19 @@ import * as actions from "../../store/actions/index";
 
 type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;
 type mapStateToPropsType = ReturnType<typeof mapStateToProsp>;
-export type BurgerBuilderType = ReturnType<typeof BurgerBuilder>;
-export type BurgerBuilderType2 = typeof BurgerBuilder;
+export type BurgerBuilderReturnType = ReturnType<typeof BurgerBuilder>;
+export type BurgerBuilderType = typeof BurgerBuilder;
 export type BurgerBuilderPropsType = mapDispatchToPropsType &
   mapStateToPropsType;
 
-export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
+export const BurgerBuilder: React.FC<BurgerBuilderPropsType> = (props) => {
   const initState = {
     purchasing: false,
   };
 
   const navigate = useNavigate();
   const [state, setState] = useState(initState);
-
+  const { onInitIngredients } = props
   const purchaseHandler = () => {
     if (props.isAuth) {
       setState((prev) => ({ ...prev, purchasing: true }));
@@ -90,8 +90,8 @@ export const BurgerBuilder = (props: BurgerBuilderPropsType) => {
     );
   }
   useEffect(() => {
-    props.onInitIngredients();
-  }, []);
+    onInitIngredients();
+  }, [onInitIngredients]);
 
   return (
     <Aux>
@@ -129,7 +129,7 @@ export default connect(
   mapStateToProsp,
   mapDispatchToProps
 )(
-  withErrorHandler<BurgerBuilderType2, BurgerBuilderPropsType>(
+  withErrorHandler<BurgerBuilderType, BurgerBuilderPropsType>(
     BurgerBuilder,
     Axios
   )

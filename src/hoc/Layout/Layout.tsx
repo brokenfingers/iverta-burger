@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState } from "react";
 import Auxx from "../Auxx/Auxx";
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 import Toolbar from "../../components/Navigation/Toolbar/Toolbar";
@@ -10,41 +10,41 @@ type Props = {
   children: React.ReactNode;
 } & mapStateToPropsType;
 
-interface State {
-  showSideDrawer: boolean;
-}
 
-class Layout extends Component<Props, State> {
-  state = {
+const Layout: React.FC<Props> = (props) => {
+
+  const initState = {
     showSideDrawer: false,
   };
+  const [state, setState] = useState(initState)
 
-  sideDrawerClosedHandler = () => {
-    this.setState({ showSideDrawer: false });
+
+  const sideDrawerClosedHandler = () => {
+    setState({ showSideDrawer: false });
   };
 
-  sideDrawerOpenHandler = () => {
-    this.setState((prevState) => {
+  const sideDrawerOpenHandler = () => {
+    setState((prevState) => {
       return { showSideDrawer: !prevState.showSideDrawer };
     });
   };
 
-  render() {
-    return (
-      <Auxx>
-        <Toolbar
-          isAuth={this.props.isAuthenticated}
-          openSidedrawer={this.sideDrawerOpenHandler}
-        />
-        <SideDrawer
-          isAuth={this.props.isAuthenticated}
-          open={this.state.showSideDrawer}
-          closed={this.sideDrawerClosedHandler}
-        />
-        <main className={classes.Content}>{this.props.children}</main>
-      </Auxx>
-    );
-  }
+
+  return (
+    <Auxx>
+      <Toolbar
+        isAuth={props.isAuthenticated}
+        openSidedrawer={sideDrawerOpenHandler}
+      />
+      <SideDrawer
+        isAuth={props.isAuthenticated}
+        open={state.showSideDrawer}
+        closed={sideDrawerClosedHandler}
+      />
+      <main className={classes.Content}>{props.children}</main>
+    </Auxx>
+  );
+
 }
 
 type mapStateToPropsType = ReturnType<typeof mapStateToProps>;

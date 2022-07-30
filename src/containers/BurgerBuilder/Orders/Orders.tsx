@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import Order from "../../../components/Order/Order";
 import axios from "../../../axios-orders";
-import { IOrder } from "../../../Interfaces";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import { TDispatch, TRootReducer } from "../../../store/store";
 import * as actions from "../../../store/actions";
@@ -10,15 +9,14 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 
 type Props = mapDispatchToPropsType & mapStateToPropsType;
 
-const Orders = (props: Props) => {
-  const initState = {
-    orders: [] as IOrder[],
-    loading: true,
-  };
+const Orders: React.FC<Props> = (props) => {
+
+  const { onFetchOrders, token, userId } = props
 
   useEffect(() => {
-    props.onFetchOrders(props.token, props.userId);
-  }, []);
+    onFetchOrders(token, userId);
+  }, [onFetchOrders, token, userId]);
+
   let orders: JSX.Element[] = [<Spinner key={new Date().getTime()} />];
   if (!props.loading) {
     orders = props.orders.map((order) => (
