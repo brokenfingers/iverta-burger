@@ -117,13 +117,17 @@ const Auth: FunctionComponent<autProps> = (props) => {
   let authRedirect = null;
   if (props.isAuth) authRedirect = <Navigate to={props.authRedirectPath} />;
 
+  const { buildingBurger, authRedirectPath, onSetAuthRedirect } = props
 
   useEffect(() => {
 
-    if (!props.buildingBurger && props.authRedirectPath !== "/") {
-      props.onSetAuthRedirect();
+    if (!buildingBurger && authRedirectPath !== "/") {
+      onSetAuthRedirect();
     }
-  }, []);
+    // if (!props.buildingBurger && props.authRedirectPath !== "/") {
+    //   props.onSetAuthRedirect();
+    // }
+  }, [buildingBurger, authRedirectPath, onSetAuthRedirect]);
 
   return (
     <div className={classes.Auth}>
