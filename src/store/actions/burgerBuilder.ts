@@ -1,20 +1,17 @@
 import {
-  IBurgerBuilderActionType,
   IngredientNames,
   Ingredients,
 } from "../../Interfaces";
 import { axiosOrders } from "../../axios-orders";
 import * as actionTypes from "./actionTypes";
+import { TDispatch } from "../store";
+
 
 export const addIngredient = (name: IngredientNames) => {
   return {
     type: actionTypes.ADD_INGREDIENT,
     ingredientName: name,
   };
-};
-
-type removeIngredientsType = IBurgerBuilderActionType & {
-  ingredientName: IngredientNames;
 };
 
 export const removeIngredient = (name: IngredientNames) => {
@@ -24,15 +21,6 @@ export const removeIngredient = (name: IngredientNames) => {
   };
 };
 
-type setIngredientsType = IBurgerBuilderActionType & {
-  ingredients: Ingredients;
-};
-
-// export type burgerBuilderActionTypes =
-//   | (IBurgerBuilderActionType & { ingredients: Ingredients })
-//   | {
-//       ingredientName: IngredientNames;
-//     };
 
 export const setIngredients = (ingredients: Ingredients) => {
   return {
@@ -47,17 +35,27 @@ export const fetchIngredientsFailed = () => {
   };
 };
 
-type InitIngredients = () => (dispatch: Function) => void;
+export type setIngredientsType = {
+  type: typeof actionTypes.SET_INGREDIENTS,
+  ingredients: Ingredients
+}
 
-export const initIngredients: InitIngredients = () => {
-  return (dispatch) => {
+type fetchIngredientsFailedType = {
+  type: typeof actionTypes.FETCH_INGREDIENTS_FAILED,
+};
+
+export function initIngredients() {
+  return async (dispatch: TDispatch) => {
+
     axiosOrders
       .getIngredients()
       .then((response) => {
-        dispatch(setIngredients(response));
+        dispatch(setIngredients(response) as setIngredientsType);
       })
       .catch((error) => {
-        dispatch(fetchIngredientsFailed());
+        dispatch(fetchIngredientsFailed() as fetchIngredientsFailedType);
       });
-  };
-};
+
+
+  }
+}

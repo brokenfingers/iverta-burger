@@ -9,51 +9,16 @@ import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import { Navigate } from "react-router-dom";
 import { checkValidity, updateObject } from "../../shared/utility";
+import { initAuthState } from "../../shared/initialData";
 
 type autProps = mapDispatchToPropsType & mapStateToPropsType;
 
 const Auth: FunctionComponent<autProps> = (props) => {
-  const initState = {
-    controls: {
-      email: {
-        elementType: "input",
-        elementConfig: {
-          type: "email",
-          placeholder: "Mail Address",
-        },
-        value: "",
-        touched: false,
-        validation: {
-          rules: {
-            required: true,
-            isEmail: true,
-          },
-          valid: false,
-        },
-      },
-      password: {
-        elementType: "input",
-        elementConfig: {
-          type: "password",
-          placeholder: "Password",
-        },
-        value: "",
-        touched: false,
-        validation: {
-          rules: {
-            required: true,
-            minLength: 6,
-          },
-          valid: false,
-        },
-      },
-    },
-    isSignUp: true,
-  };
-  const [authState, setAuthState] = useState(initState);
+
+  const [authState, setAuthState] = useState(initAuthState);
 
   const formElementsArray = [];
-  type controlNames = keyof typeof initState.controls;
+  type controlNames = keyof typeof initAuthState.controls;
   for (let key in authState.controls) {
     formElementsArray.push({
       id: key,
@@ -117,13 +82,13 @@ const Auth: FunctionComponent<autProps> = (props) => {
   let authRedirect = null;
   if (props.isAuth) authRedirect = <Navigate to={props.authRedirectPath} />;
 
+  const { buildingBurger, authRedirectPath, onSetAuthRedirect } = props
 
   useEffect(() => {
-
-    if (!props.buildingBurger && props.authRedirectPath !== "/") {
-      props.onSetAuthRedirect();
+    if (!buildingBurger && authRedirectPath !== "/") {
+      onSetAuthRedirect();
     }
-  }, []);
+  }, [buildingBurger, authRedirectPath, onSetAuthRedirect]);
 
   return (
     <div className={classes.Auth}>

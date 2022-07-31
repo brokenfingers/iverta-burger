@@ -1,13 +1,9 @@
-import { Component, lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Layout from "./hoc/Layout/Layout";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 
-// import Checkout from "./containers/BurgerBuilder/Checkout/Checkout";
-// import ContactData from "./containers/BurgerBuilder/Checkout/ContactData/ContactData";
-// import Orders from "./containers/BurgerBuilder/Orders/Orders";
-// import Auth from "./containers/Auth/Auth";
 import Logout from "./containers/Auth/Logout/Logout";
 import { connect } from "react-redux";
 import { RootState, TDispatch } from "./store/store";
@@ -23,39 +19,35 @@ const Auth = lazy(async () => ({ default: (await import('./containers/Auth/Auth'
 
 type Props = mapDispatchToPropsType & mapStateToPropsType;
 
-class App extends Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
+const App: React.FC<Props> = (props) => {
+  const { onTryAutoSignup } = props
 
-  componentDidMount() {
-    this.props.onTryAutoSignup();
-  }
-  render() {
-    return (
-      <div>
-        <Layout>
-          <Suspense fallback={<Spinner />}>
-            <Routes>
-              {this.props.isAuthenticated && (
-                <>
-                  <Route path="checkout" element={<Checkout />}>
-                    <Route path="contact-data" element={<ContactData />} />
-                  </Route>
-                  <Route path="/orders" element={<Orders />} />
-                  <Route path="/logout" element={<Logout />} />
-                </>
-              )}
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/" element={<BurgerBuilder />} />
-              <Route path="*" element={<BurgerBuilder />} /> // page-not-found
-              route
-            </Routes>
-          </Suspense>
-        </Layout>
-      </div>
-    );
-  }
+  useEffect(() => {
+    onTryAutoSignup();
+  }, [onTryAutoSignup])
+
+  return (
+    <div>
+      <Layout>
+        <Suspense fallback={<Spinner />}>
+          <Routes>
+            {props.isAuthenticated && (
+              <>
+                <Route path="checkout" element={<Checkout />}>
+                  <Route path="contact-data" element={<ContactData />} />
+                </Route>
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/logout" element={<Logout />} />
+              </>
+            )}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<BurgerBuilder />} />
+            <Route path="*" element={<BurgerBuilder />} />
+          </Routes>
+        </Suspense>
+      </Layout>
+    </div>
+  );
 }
 
 type mapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>;

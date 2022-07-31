@@ -1,65 +1,28 @@
 import Modal from "../../components/UI/Modal/Modal";
 import Aux from "../Auxx/Auxx";
-
-import { Component } from "react";
+import useHttpErrorHandler from '../../hooks/httpErrorHandle'
 import { AxiosInstance } from "axios";
 
 const withErrorHandler = <T extends Function, P>(
   WrappedComponent: T,
   axios: AxiosInstance
 ) => {
-  return class extends Component<P> {
-    state: { error: null | { message: string } };
+  return (props: P) => {
 
-    resInterceptor: number | null = null;
-    reqInterceptor: number | null = null;
+    const [error, clearError] = useHttpErrorHandler(axios)
 
-    constructor(props: P) {
-      super(props);
-
-      this.state = {
-        error: null,
-      };
-    }
-
-    componentDidMount() {
-      this.reqInterceptor = axios.interceptors.request.use((req) => {
-        this.setState({ error: null });
-        return req;
-      });
-
-      this.resInterceptor = axios.interceptors.response.use(
-        (res) => res,
-        (error) => {
-          this.setState({ error: error });
-        }
-      );
-    }
-
-    componentWillUnmount() {
-      this.reqInterceptor &&
-        axios.interceptors.request.eject(this.reqInterceptor);
-      this.resInterceptor &&
-        axios.interceptors.response.eject(this.resInterceptor);
-    }
-
-    errorConfirmedHandler = () => {
-      this.setState({ error: null });
-    };
-    render() {
-      return (
-        <Aux>
-          <Modal
-            show={this.state.error ? true : false}
-            modalClosed={this.errorConfirmedHandler}
-          >
-            {this.state.error && this.state.error.message}
-          </Modal>
-          <WrappedComponent {...this.props} />
-        </Aux>
-      );
-    }
-  };
+    return (
+      <Aux>
+        <Modal
+          show={error ? true : false}
+          modalClosed={clearError as () => void}
+        >
+          {error && error.toString()}
+        </Modal>
+        <WrappedComponent {...props} />
+      </Aux>
+    );
+  }
 };
 
 export default withErrorHandler;
