@@ -11,7 +11,7 @@ const initialState = {
 
 export type authReducerReturn = typeof initialState;
 
-type actionType = {
+export type authActionType = {
     type: keyof typeof actionTypes;
     idToken: string;
     userId: string;
@@ -19,11 +19,11 @@ type actionType = {
     path: string;
 };
 
-const authStart = (state: typeof initialState, action: actionType) => {
+const authStart = (state: typeof initialState, action: authActionType) => {
     return updateObject(state, { error: "", loading: true });
 };
 
-const authSuccess = (state: typeof initialState, action: actionType) => {
+const authSuccess = (state: typeof initialState, action: authActionType) => {
     return updateObject(state, {
         token: action.idToken,
         userId: action.userId,
@@ -32,7 +32,7 @@ const authSuccess = (state: typeof initialState, action: actionType) => {
     });
 };
 
-const authFail = (state: typeof initialState, action: actionType) => {
+const authFail = (state: typeof initialState, action: authActionType) => {
     return updateObject(state, { error: action.error, loading: false });
 };
 
@@ -42,12 +42,12 @@ const authLogout = (state: typeof initialState) => {
 
 const setAuthRedirectPath = (
     state: typeof initialState,
-    action: actionType
+    action: authActionType
 ) => {
     return updateObject(state, { authRedirectPath: action.path });
 };
 
-const authReducer = (state = initialState, action: actionType) => {
+const authReducer = (state = initialState, action: authActionType) => {
     switch (action.type) {
         case actionTypes.AUTH_START:
             return authStart(state, action);

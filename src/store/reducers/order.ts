@@ -9,7 +9,7 @@ const initialState = {
   purchased: false,
 };
 
-type actionTypes = {
+export type orderActionTypes = {
   type: keyof typeof actionTypes;
   orderData: IOrder;
   orderId: string;
@@ -32,7 +32,7 @@ const purchaseBurgerStart = (state: typeof initialState) => {
 
 const purchaseBurgerSuccess = (
   state: typeof initialState,
-  action: actionTypes
+  action: orderActionTypes
 ) => {
   const newOrder = updateObject(action.orderData, { id: action.orderId });
 
@@ -53,7 +53,7 @@ const fetchOrderStart = (state: typeof initialState) => {
 
 const fetchOrdersSuccess = (
   state: typeof initialState,
-  action: actionTypes
+  action: orderActionTypes
 ) => {
   return updateObject(state, { loading: false, orders: action.orders });
 };
@@ -64,7 +64,7 @@ const fetchOrdersFail = (state: typeof initialState) => {
 
 const orderReducer = (
   state: typeof initialState = initialState,
-  action: actionTypes
+  action: orderActionTypes
 ): orderReducerReturnType => {
   switch (action.type) {
     case actionTypes.PURCHASE_INIT:

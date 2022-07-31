@@ -2,6 +2,8 @@ import { IngredientNames, Ingredients } from "../../Interfaces";
 import * as actionTypes from "../actions/actionTypes";
 import { updateObject } from "../../shared/utility";
 
+export type initialBBReducer = typeof initialState
+
 const initialState = {
   ingredients: {} as Ingredients,
   totalPrice: 4,
@@ -34,7 +36,7 @@ export type actionFetchIngredients = {
   type: typeof actionTypes.FETCH_INGREDIENTS_FAILED;
 };
 
-type actionTypeSelection =
+export type actionTypeSelection =
   | actionAddIngredients
   | actionRemoveIngredients
   | actionSetIngredients

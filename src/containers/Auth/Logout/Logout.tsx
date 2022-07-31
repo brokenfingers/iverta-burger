@@ -5,9 +5,10 @@ import { Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 
 const Logout: FunctionComponent<mapDispatchToPropsType> = (props) => {
+  const { onLogout } = props
   useEffect(() => {
-    props.onLogout();
-  }, []);
+    onLogout();
+  }, [onLogout]);
 
   return <Navigate to="/" />;
 };
